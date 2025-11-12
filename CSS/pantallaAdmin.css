@@ -1,0 +1,85 @@
+/* Estilos generales */
+body {
+    background-color: #f0f2f5;
+    min-height: 100vh;
+}
+
+/* Estilos del encabezado */
+/* Estilo del encabezado principal */
+.admin-header {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 0; /* Ajuste el padding vertical */
+}
+
+/* El estilo del título y subtítulo se maneja con el HTML */
+.admin-header h2 {
+    font-size: 1.8rem;
+}
+
+.admin-header .lead {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+/* Estilo del botón de cerrar sesión */
+.btn-danger {
+    min-width: 150px;
+    height: 45px;
+    /* Ajustamos el tamaño de fuente y la alineación */
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* El resto de tus estilos (.widget-card, .form-section, etc.) se mantiene sin cambios. */
+
+/* Estilos de las tarjetas de widgets */
+.widget-card {
+    background-color: white;
+    border-left: 5px solid #007bff;
+    transition: transform 0.2s;
+}
+
+.widget-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para la sección del formulario de Agregar Habitación */
+.form-section {
+    background-color: white;
+    padding: 30px;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* Estilos para la previsualización de imágenes */
+.image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+    border: 1px dashed #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    min-height: 100px;
+    align-items: center; /* Centrar verticalmente cuando está vacío */
+    justify-content: center; /* Centrar horizontalmente cuando está vacío */
+    color: #888;
+}
+
+.image-preview {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.image-preview-placeholder {
+    text-align: center;
+    padding: 20px;
+}
+

@@ -1,0 +1,13 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8fafc, #e6eef8);
+}
+
+.card {
+    width: 100%;
+    max-width: 420px;
+    border-radius: 1rem;
+}

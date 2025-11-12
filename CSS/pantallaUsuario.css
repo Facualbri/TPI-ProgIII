@@ -1,0 +1,19 @@
+ /* Estilos específicos para las tarjetas de oferta */
+ .offer-card {
+     transition: transform 0.2s, box-shadow 0.2s;
+     border-radius: 0.75rem;
+     /* Bordes redondeados */
+ }
+
+ .offer-card:hover {
+     transform: translateY(-5px);
+     /* Pequeño levantamiento al pasar el mouse */
+     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+     /* Sombra más fuerte al pasar el mouse */
+ }
+
+ /* Ajuste para el fondo, si se mantiene el estilo de tpi.css */
+ body {
+     background: linear-gradient(135deg, #f8fafc, #e6eef8);
+     min-height: 100vh;
+ }

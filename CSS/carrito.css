@@ -1,0 +1,10 @@
+ /* Estilos específicos para la página de carrito */
+ body {
+     background: linear-gradient(135deg, #f8fafc, #e6eef8);
+     min-height: 100vh;
+ }
+
+ .summary-card {
+     border: 1px solid #dee2e6;
+     border-radius: 0.5rem;
+ }

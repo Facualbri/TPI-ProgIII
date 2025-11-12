@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Carrito de Reserva - Hotel tpi</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/CSS/carrito.css">
+    
+</head>
+
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-5 text-primary"><i class="bi bi-cart-fill"></i> Resumen de tu Reserva</h1>
+        
+        <div class="row">
+            
+            <div class="col-lg-8 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5>Detalles del Producto Reservado</h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        <div class="d-flex mb-3">
+                            <img src="https://picsum.photos/100/80?random=4" alt="Imagen del Hotel" class="rounded me-3">
+                            <div>
+                                <h5 class="mb-1">Habitación Doble - Hotel Brisa del Mar</h5>
+                                <p class="text-muted mb-0">Ubicación: Cancún, México</p>
+                                <p class="small text-success fw-bold">Fecha de Entrada: 15/12/2025 | Salida: 18/12/2025</p>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <p class="mb-1">Noches reservadas: <span class="fw-bold">3</span></p>
+                        <p class="mb-1">Huéspedes: <span class="fw-bold">2 adultos</span></p>
+                        <p class="mb-0">Servicios Incluidos: Desayuno continental, Wi-Fi.</p>
+                    </div>
+                </div>
+                
+                <a href="/HTML/pantallausuario.html" class="btn btn-outline-secondary mt-3"><i class="bi bi-arrow-left"></i> Seguir Buscando Ofertas</a>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="card summary-card shadow-sm bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Total a Pagar</h5>
+                        
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
+                                Precio por noche:
+                                <span>$120.00</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
+                                Subtotal (3 noches):
+                                <span>$360.00</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
+                                Impuestos y Tasas:
+                                <span>$45.00</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center fw-bold bg-white">
+                                Total Final:
+                                <span class="text-success fs-5">$405.00</span>
+                            </li>
+                        </ul>
+                        
+                        <div class="d-grid">
+                            <button class="btn btn-success btn-lg"><i class="bi bi-credit-card-fill me-2"></i> Pasar a Facturación</button>
+                        </div>
+                        
+                        <p class="text-center small text-muted mt-2">Serás redirigido a la página de pago seguro.</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
