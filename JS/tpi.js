@@ -1,81 +1,116 @@
+import { User, API_USERS } from './Usuario.js';
+import { Room, API_ROOMS } from './Habitacion.js';
+import { Reservation, API_RESERVATIONS } from './Reserva.js';
+import { crearUsuario } from './Usuario.js';
 
-async function obtenerUsuarios() {
+export async function obtenerUsuarios() {
   try {
     const res = await fetch(API_USERS);
-    const data = await res.json();
-    const usuarios = data.map(u => new User(u.id, u.nombre, u.email, u.password, u.role));
-    console.log("Usuarios cargados:", usuarios);
-    return usuarios;
+    const usuarios = await res.json();
+    return usuarios.map(u => new User(u.id, u.nombre, u.email, u.password, u.role));
   } catch (error) {
     console.error("Error al obtener usuarios:", error);
   }
 }
 
-async function obtenerHabitaciones() {
+export async function obtenerHabitaciones() {
   try {
     const res = await fetch(API_ROOMS);
-    const data = await res.json();
-    const habitaciones = data.map(h => new Room(h.id, h.tipo, h.precio, h.disponible));
-    console.log("Habitaciones cargadas:", habitaciones);
-    return habitaciones;
+    const rooms = await res.json();
+    return rooms.map(h => new Room(h.id, h.tipo, h.precio, h.disponible));
   } catch (error) {
     console.error("Error al obtener habitaciones:", error);
   }
 }
 
-async function obtenerReservas() {
+export async function obtenerReservas() {
   try {
     const res = await fetch(API_RESERVATIONS);
-    const data = await res.json();
-    const reservas = data.map(r => new Reservation(r.id, r.userId, r.roomId, r.checkIn, r.checkOut, r.estado));
-    console.log("Reservas cargadas:", reservas);
-    return reservas;
+    const reservas = await res.json();
+    return reservas.map(r => new Reservation(r.id, r.userId, r.roomId, r.checkIn, r.checkOut, r.estado));
   } catch (error) {
     console.error("Error al obtener reservas:", error);
   }
 }
 
-async function registrarUsuario(nombre, email, password, role = "cliente") {
+export async function loginUsuario(email, password) {
   try {
-    const nuevoUsuario = { nombre, email, password, role };
-    const res = await fetch(API_USERS, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(nuevoUsuario)
-    });
-    
-    const data = await res.json();
-    console.log("Usuario registrado:", data);
-    return data;
-  } catch (error) {
-    console.error("Error al registrar usuario:", error);
-  }
-}
-async function loginUsuario(email, password) {
-  try {
-    const data = await fetch(API_USERS);
-    const usuarios = await data.json();
+    const res = await fetch(API_USERS);
+    const usuarios = await res.json();
 
-    const usuario = usuarios.find(u => u.email === email && u.password === password);
+    const usuario = usuarios.find(u => 
+      u.email.trim().toLowerCase() === email.trim().toLowerCase() &&
+      u.password === password
+    );
 
     if (usuario) {
       console.log("Login exitoso:", usuario);
+
+      // Guardar en localStorage
+      localStorage.setItem("usuarioActivo", JSON.stringify(usuario));
+
+      // Redirigir según el rol
+      if (usuario.role === "ADMIN") {
+        window.location.href = "../HTML/pantallaAdmin.html";
+      } else {
+        window.location.href = "../HTML/pantallaUsuario.html";
+      }
+
       return usuario;
     } else {
-      console.warn("Usuario o contraseña incorrectos");
+      alert("Usuario o contraseña incorrectos");
       return null;
     }
   } catch (error) {
     console.error("Error en login:", error);
   }
 }
+//conexion funcion loginUsuario con boton
+const botonLogin = document.getElementById("loginForm");
 
-// ==========================
-// PRUEBAS DE LOGIN Y REGISTRO
-// ==========================
+if (botonLogin) {
+  botonLogin.addEventListener("submit", async (e) => {
+    e.preventDefault();//le decimos que no recargue la pagina, se encarga el js
 
-// 1 Registrar un nuevo usuario
-//registrarUsuario("Mariano", "mariano@example.com", "123456", "cliente");
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-// 2 Probar login con un usuario ya creado
-// loginUsuario("mariano@example.com", "123456");
+    if (!email || !password) {
+      alert("Por favor, completá todos los campos.");
+      return;
+    }
+
+    // Llamamos directamente a la función que ya hace todo
+    await loginUsuario(email, password);
+  });
+}
+//conexion formulario registro con funcion crearUsuario
+const registerForm = document.getElementById("registerForm");
+
+if (registerForm) {
+  registerForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Obtener valores de los inputs
+    const nombre = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    // Por defecto le damos rol USER (podés cambiarlo si querés)
+    const role = "USER";
+
+    // Crear el usuario
+    await crearUsuario(nombre, email, password, role);
+
+    alert("✅ Usuario creado correctamente. Ahora podés iniciar sesión.");
+    
+    // Redirigir al login
+    window.location.href = "/HTML/pantallaPrincipal.html";
+  });
+}
+
+
+
+
+
+
