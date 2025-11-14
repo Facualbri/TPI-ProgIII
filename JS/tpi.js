@@ -73,7 +73,7 @@ if (botonLogin) {
     e.preventDefault();//le decimos que no recargue la pagina, se encarga el js
 
     const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const password = document.getElementById("passwordLogin").value;
 
     if (!email || !password) {
       alert("Por favor, completá todos los campos.");
@@ -94,7 +94,7 @@ if (registerForm) {
     // Obtener valores de los inputs
     const nombre = document.getElementById("name").value;
     const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const password = document.getElementById("passwordRegister").value;
 
     // Por defecto le damos rol USER (podés cambiarlo si querés)
     const role = "USER";
@@ -108,6 +108,49 @@ if (registerForm) {
     window.location.href = "/HTML/pantallaPrincipal.html";
   });
 }
+export function cerrarSesion() {
+  // borrar usuario en localStorage
+  localStorage.removeItem("usuarioActivo");
+
+  // redirigir a pantallaPrincipal
+  window.location.href = "/HTML/pantallaPrincipal.html";
+}
+//conexion boton cerrar sesion con funcion cerrarSesion
+const btnCerrar = document.getElementById("btnCerrarSesion");
+
+if (btnCerrar) {
+  btnCerrar.addEventListener("click", (e) => {
+    e.preventDefault();
+    cerrarSesion();
+  });
+}
+
+// ocular/mostrar contraseña en pantallaprincipal y registro
+function ocultarYMostrarPass(idInput, idBoton) {
+  const input = document.getElementById(idInput);
+  const boton = document.getElementById(idBoton);
+
+  if (!input || !boton) return; // Si no existe en esta página, no hace nada
+
+  const icon = boton.querySelector("i");
+
+  boton.addEventListener("click", () => {
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.replace("bi-eye", "bi-eye-slash");
+      boton.setAttribute("aria-label", "Ocultar contraseña");
+    } else {
+      input.type = "password";
+      icon.classList.replace("bi-eye-slash", "bi-eye");
+      boton.setAttribute("aria-label", "Mostrar contraseña");
+    }
+  });
+}
+//activa en cada formulario
+  ocultarYMostrarPass("passwordRegister", "ocultarPassRegister");
+  ocultarYMostrarPass("passwordLogin", "ocultarPassLogin");
+
+
 
 
 

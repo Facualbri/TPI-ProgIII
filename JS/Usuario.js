@@ -14,20 +14,25 @@ export class User {
   }
 }
 
+// Función para crear usuario
 export async function crearUsuario(nombre, email, password, role) {
-  const nuevoUsuario = { nombre, email, password, role };
-
+  nuevoUsuario = new User(nombre, email, password, role);
   try {
     const response = await fetch(API_USERS, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(nuevoUsuario)
     });
+
+    if (!response.ok) {
+      throw new Error("No se pudo crear el usuario en el servidor");
+    }
+
     const user = await response.json();
-    console.log('Usuario creado:', user);
+    alert("Usuario creado correctamente: " + user.nombre);
     return user;
   } catch (error) {
-    console.error('Error al crear usuario:', error);
+    alert("Error al crear usuario: " + error.message);
   }
 }
 export async function registrarUsuario(nombre, email, password, role = "cliente") {

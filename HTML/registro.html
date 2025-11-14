@@ -16,38 +16,43 @@
             <h4 class="card-title mb-4 text-center">Crear Cuenta</h4>
 
             <form id="registerForm" method="POST" action="/register-submit">
-                
-                <div class="mb-3">
-                    <label for="name" class="form-label">Nombre Completo</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-person"></i></span>
-                        <input type="text" id="name" name="name" class="form-control" required placeholder="Tu nombre" />
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Correo electrónico</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                        <input type="email" id="email" name="email" class="form-control" required placeholder="tu@ejemplo.com" />
-                    </div>
-                </div>
 
-                <div class="mb-4">
-                    <label for="password" class="form-label">Contraseña</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                        <input type="password" id="password" name="password" class="form-control" required minlength="6" placeholder="••••••••" />
-                        </div>
-                </div>
+    <div class="mb-3">
+        <label for="name" class="form-label">Nombre Completo</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input type="text" id="name" name="name" class="form-control" required placeholder="Tu nombre" />
+        </div>
+    </div>
 
-                <div class="d-grid mb-3">
-                    <button type="submit" class="btn btn-success">Registrarse</button>
-                </div>
+    <div class="mb-3">
+        <label for="emailRegister" class="form-label">Correo electrónico</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+            <input type="email" id="emailRegister" name="email" class="form-control" required placeholder="tu@ejemplo.com" />
+        </div>
+    </div>
 
-                <div class="text-center small">
-                    ¿Ya tienes una cuenta? <a href="/HTML/pantallaPrincipal.html">Ingresar</a>
-                </div>
-            </form>
+    <div class="mb-4">
+        <label for="passwordRegister" class="form-label">Contraseña</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" id="passwordRegister" name="password" class="form-control" required minlength="6" placeholder="••••••••" />
+            <button type="button" class="btn btn-outline-secondary" id="ocultarPassRegister" aria-label="Mostrar contraseña">
+                <i class="bi bi-eye"></i>
+            </button>
+        </div>
+    </div>
+    <div class="d-grid mb-3">
+        <button type="submit" class="btn btn-success">Registrarse</button>
+    </div>
+
+    <div class="text-center small">
+        ¿Ya tienes una cuenta? <a href="/HTML/pantallaPrincipal.html">Ingresar</a>
+    </div>
+
+</form>
+
         </div>
     </main>
 
