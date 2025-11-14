@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="/CSS/carrito.css">
-    
 </head>
 
 <body>
@@ -18,26 +17,34 @@
         <div class="row">
             
             <div class="col-lg-8 mb-4">
-                <div class="card shadow-sm">
+                <div class="card shadow-sm mb-4">
                     <div class="card-header bg-primary text-white">
                         <h5>Detalles del Producto Reservado</h5>
                     </div>
                     <div class="card-body">
                         
-                        <div class="d-flex mb-3">
-                            <img src="https://picsum.photos/100/80?random=4" alt="Imagen del Hotel" class="rounded me-3">
-                            <div>
-                                <h5 class="mb-1">Habitación Doble - Hotel Brisa del Mar</h5>
-                                <p class="text-muted mb-0">Ubicación: Cancún, México</p>
-                                <p class="small text-success fw-bold">Fecha de Entrada: 15/12/2025 | Salida: 18/12/2025</p>
-                            </div>
+                        <div id="reservaDetalles" class="d-flex mb-3">
+                            <p class="text-muted">Cargando detalles de la reserva...</p>
                         </div>
                         
                         <hr>
+
+                        <h5>Opciones de Estancia</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="checkInDate" class="form-label">Fecha de Check-in (Entrada)</label>
+                                <input type="date" class="form-control" id="checkInDate" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nroNochesInput" class="form-label">Cantidad de Noches</label>
+                                <input type="number" class="form-control" id="nroNochesInput" min="1" value="1" required>
+                            </div>
+                        </div>
                         
-                        <p class="mb-1">Noches reservadas: <span class="fw-bold">3</span></p>
-                        <p class="mb-1">Huéspedes: <span class="fw-bold">2 adultos</span></p>
+                        <p class="mb-1">Huéspedes: <span id="nroHuespedes" class="fw-bold">2 adultos</span></p>
+                        <p class="mb-1">Fecha de Salida (Check-out): <span id="checkOutDate" class="fw-bold text-danger">Pendiente</span></p>
                         <p class="mb-0">Servicios Incluidos: Desayuno continental, Wi-Fi.</p>
+                        <p class="mt-2 small text-muted">Estado de la Reserva: <span id="estadoReserva" class="fw-bold text-warning">PENDIENTE</span></p>
                     </div>
                 </div>
                 
@@ -52,27 +59,27 @@
                         <ul class="list-group list-group-flush mb-3">
                             <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
                                 Precio por noche:
-                                <span>$120.00</span>
+                                <span id="precioNoche">$0.00</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
-                                Subtotal (3 noches):
-                                <span>$360.00</span>
+                                Subtotal (<span id="textoNoches">1 noche</span>):
+                                <span id="subtotal">$0.00</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
-                                Impuestos y Tasas:
-                                <span>$45.00</span>
+                                Impuestos y Tasas (10%):
+                                <span id="impuestos">$0.00</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center fw-bold bg-white">
                                 Total Final:
-                                <span class="text-success fs-5">$405.00</span>
+                                <span id="totalFinal" class="text-success fs-5">$0.00</span>
                             </li>
                         </ul>
                         
                         <div class="d-grid">
-                            <button class="btn btn-success btn-lg"><i class="bi bi-credit-card-fill me-2"></i> Pasar a Facturación</button>
+                            <button id="btnConfirmarReserva" class="btn btn-success btn-lg"><i class="bi bi-calendar-check-fill me-2"></i> Confirmar Reserva</button>
                         </div>
                         
-                        <p class="text-center small text-muted mt-2">Serás redirigido a la página de pago seguro.</p>
+                        <p class="text-center small text-muted mt-2">La reserva se guardará con estado PENDIENTE.</p>
                     </div>
                 </div>
             </div>
@@ -81,6 +88,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="/JS/tpi.js"></script>
+    <script type="module" src="/JS/tpi.js"></script> 
 </body>
 </html>

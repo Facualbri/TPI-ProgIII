@@ -18,3 +18,30 @@ export class Reservation {
     this.estado = "confirmada";
   }
 }
+
+
+export async function crearReserva(nuevaReserva) {
+  
+    try {
+        const response = await fetch(API_RESERVATIONS, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(nuevaReserva) // Enviamos el objeto de reserva como JSON
+        });
+
+        if (!response.ok) {
+            const errorDetails = await response.text();
+            throw new Error(`Error ${response.status}: No se pudo crear la reserva en el servidor. Detalle: ${errorDetails}`);
+        }
+
+        const reservaGuardada = await response.json();
+
+        alert("Reserva creada correctamente. ID de Reserva: " + reservaGuardada.id);
+        
+        return { success: true, data: reservaGuardada }; 
+        
+    } catch (error) {
+        alert("Error al crear reserva: " + error.message);
+        return { success: false, message: error.message };
+    }
+}

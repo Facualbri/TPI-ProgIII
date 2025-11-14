@@ -6,98 +6,711 @@
     <title>Ofertas de Hoteles - Hotel tpi</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="pantallaUsuario.css"> 
     
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4 sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">La Hoja Dorada</a>     
+            <a class="navbar-brand fs-4 fw-bold text-dark" href="#">La Hoja Dorada Hotelería ✨</a> 
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="#" id="btnCerrarSesion" class="btn btn-danger shadow-sm">
+                            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     
-   <div class="container my-5">
-    <h1 class="text-center mb-5 text-success">
-        <i class="bi bi-house-heart-fill me-2"></i> Habitaciones en Hotel La Hoja Dorada
-    </h1>
-    
-    <div class="row">
+    <div class="container my-5">
         
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card offer-card shadow-sm h-100">
-                <img src="https://images.unsplash.com/photo-1618321683935-d22756854f3b?w=400&h=200&fit=crop" class="card-img-top" alt="Habitación Individual Hotel La Hoja Dorada">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-success">Habitación Individual Tranquila</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">
-                        <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
-                    </h6>
-                    <p class="card-text flex-grow-1">Perfecta para viajeros solitarios. Vistas al jardín y cama matrimonial.</p>
-                    
-                    <ul class="list-unstyled small mb-3">
-                        <li><strong>Tipo:</strong> Single / 1 persona</li>
-                        <li><strong>Disponibilidad:</strong> <span class="text-success fw-bold">12 cupos</span></li>
-                    </ul>
-
-                    <div class="d-flex justify-content-between align-items-center mt-auto">
-                        <span class="badge bg-success fs-6">Desde $85 / noche</span>
-                        <a href="carrito.html" class="btn btn-sm btn-primary">Reservar</a>
+        <div class="row mb-5 p-4 bg-light rounded shadow-sm">
+            <div class="col-12">
+                <h4 class="mb-3 text-secondary"><i class="bi bi-search me-2"></i> Filtrar Ofertas</h4>
+                <form class="row g-3" id="searchForm">
+                    <div class="col-md-4">
+                        <label for="inputUbicacion" class="form-label">Ubicación</label>
+                        <input type="text" class="form-control" id="inputUbicacion" placeholder="Ej: Misiones">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="selectTipo" class="form-label">Tipo</label>
+                        <select id="selectTipo" class="form-select">
+                            <option selected>Todos</option>
+                            <option value="single">Individual</option>
+                            <option value="double">Doble</option>
+                            <option value="family">Familiar</option>
+                            <option value="suite">Suite</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="inputPrecio" class="form-label">Precio Máximo ($)</label>
+                        <input type="number" class="form-control" id="inputPrecio" placeholder="Ej: 200">
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel"></i> Aplicar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row" id="roomContainer">
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=1" class="card-img-top" alt="Habitación Individual Hotel La Hoja Dorada">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Habitación Individual Tranquila</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Perfecta para viajeros solitarios. Vistas al jardín y cama matrimonial.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Single / 1 persona</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-success fw-bold">12 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-success fs-6">Desde $85 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 1, "nombre": "Habitación Individual Tranquila", "ubicacion": "Misiones", "precio": 85, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=1"}'>
+                                Reservar
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card offer-card shadow-sm h-100">
-                <img src="https://images.unsplash.com/photo-1618773959110-2c70738a47bb?w=400&h=200&fit=crop" class="card-img-top" alt="Habitación Doble Hotel La Hoja Dorada">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-success">Doble Superior con Balcón</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">
-                        <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
-                    </h6>
-                    <p class="card-text flex-grow-1">Ideal para parejas. Balcón privado con vistas a la selva y minibar.</p>
-                    
-                    <ul class="list-unstyled small mb-3">
-                        <li><strong>Tipo:</strong> Doble / 2 personas</li>
-                        <li><strong>Disponibilidad:</strong> <span class="text-info fw-bold">8 cupos</span></li>
-                    </ul>
-
-                    <div class="d-flex justify-content-between align-items-center mt-auto">
-                        <span class="badge bg-info fs-6">Desde $140 / noche</span>
-                        <a href="carrito.html" class="btn btn-sm btn-primary">Reservar</a>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=2" class="card-img-top" alt="Habitación Doble Hotel La Hoja Dorada">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Doble Superior con Balcón</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Ideal para parejas. Balcón privado con vistas a la selva y minibar.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Doble / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-info fw-bold">8 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-info fs-6">Desde $140 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 2, "nombre": "Doble Superior con Balcón", "ubicacion": "Misiones", "precio": 140, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=2"}'>
+                                Reservar
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card offer-card shadow-sm h-100">
-                <img src="https://images.unsplash.com/photo-1549488344-dac2f7c00650?w=400&h=200&fit=crop" class="card-img-top" alt="Suite Familiar Hotel La Hoja Dorada">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-success">Suite Familiar Lujo</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">
-                        <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
-                    </h6>
-                    <p class="card-text flex-grow-1">Dos dormitorios interconectados. Capacidad para 4 personas y área de estar.</p>
-                    
-                    <ul class="list-unstyled small mb-3">
-                        <li><strong>Tipo:</strong> Familiar / 4 personas</li>
-                        <li><strong>Disponibilidad:</strong> <span class="text-danger fw-bold">¡3 cupos restantes!</span></li>
-                    </ul>
-
-                    <div class="d-flex justify-content-between align-items-center mt-auto">
-                        <span class="badge bg-warning text-dark fs-6">Desde $250 / noche</span>
-                        <a href="carrito.html" class="btn btn-sm btn-primary">Reservar</a>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=3" class="card-img-top" alt="Suite Familiar Hotel La Hoja Dorada">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Suite Familiar Lujo</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Dos dormitorios interconectados. Capacidad para 4 personas y área de estar.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Familiar / 4 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-danger fw-bold">¡3 cupos restantes!</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-warning text-dark fs-6">Desde $250 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 3, "nombre": "Suite Familiar Lujo", "ubicacion": "Misiones", "precio": 250, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=3"}'>
+                                Reservar
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-    </div>
-</div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=4" class="card-img-top" alt="Doble Estándar">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Doble Estándar con Vistas</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Habitación cómoda para dos. Cama Queen Size y Wi-Fi de alta velocidad.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Doble / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-success fw-bold">15 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-success fs-6">Desde $110 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 4, "nombre": "Doble Estándar con Vistas", "ubicacion": "Misiones", "precio": 110, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=4"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="text-center mt-5">
-            <a href="#" id="btnCerrarSesion" class="btn btn-lg btn-outline-danger shadow-sm">Cerrar Sesión</a>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=5" class="card-img-top" alt="Suite Presidencial">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Suite Presidencial con Jacuzzi</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">El máximo lujo. Bañera de hidromasaje, sala de estar separada y desayuno gourmet.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Suite / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-danger fw-bold">¡1 cupo restante!</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-danger fs-6">Desde $450 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 5, "nombre": "Suite Presidencial con Jacuzzi", "ubicacion": "Misiones", "precio": 450, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=5"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=6" class="card-img-top" alt="Individual Económica">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Individual Económica (Interna)</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Opción ideal para presupuestos ajustados. Cama individual y baño privado sencillo.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Single / 1 persona</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-success fw-bold">20 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-secondary fs-6">Desde $65 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 6, "nombre": "Individual Económica (Interna)", "ubicacion": "Misiones", "precio": 65, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=6"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=7" class="card-img-top" alt="Familiar con Cocina">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Apartamento Familiar con Cocina</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Espacio completo con pequeña cocina, perfecto para estancias largas en familia.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Familiar / 5 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-info fw-bold">5 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-info fs-6">Desde $220 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 7, "nombre": "Apartamento Familiar con Cocina", "ubicacion": "Misiones", "precio": 220, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=7"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=8" class="card-img-top" alt="Doble Deluxe">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Doble Deluxe - Piscina View</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Vistas directas a la piscina. Cama King Size y ducha de lluvia.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Doble / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-warning fw-bold">7 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-primary fs-6">Desde $180 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 8, "nombre": "Doble Deluxe - Piscina View", "ubicacion": "Misiones", "precio": 180, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=8"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=9" class="card-img-top" alt="Individual Business">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Individual Business (Cama King)</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Diseñada para el viajero de negocios. Amplio escritorio y cafetera premium.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Single / 1 persona</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-info fw-bold">9 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-info fs-6">Desde $100 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 9, "nombre": "Individual Business (Cama King)", "ubicacion": "Misiones", "precio": 100, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=9"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=10" class="card-img-top" alt="Suite Junior Bosque">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Suite Junior Bosque</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Pequeña suite con área de lectura. Balcón con inmejorables vistas al bosque.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Suite / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-info fw-bold">6 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-primary fs-6">Desde $210 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 10, "nombre": "Suite Junior Bosque", "ubicacion": "Misiones", "precio": 210, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=10"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=11" class="card-img-top" alt="Triple Clásica">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Habitación Triple Clásica</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Una cama matrimonial y una individual. Perfecta para un grupo pequeño o familia.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Triple / 3 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-success fw-bold">10 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-success fs-6">Desde $160 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 11, "nombre": "Habitación Triple Clásica", "ubicacion": "Misiones", "precio": 160, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=11"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=12" class="card-img-top" alt="Individual Terraza">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Individual Premium con Terraza</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Habitación de esquina con una pequeña terraza privada y hamaca paraguaya.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Single / 1 persona</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-danger fw-bold">2 cupos restantes!</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-warning text-dark fs-6">Desde $130 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 12, "nombre": "Individual Premium con Terraza", "ubicacion": "Misiones", "precio": 130, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=12"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=13" class="card-img-top" alt="Cabaña Familiar">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Cabaña Familiar Superior</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Unidad independiente con chimenea. Capacidad máxima para 6 personas. </p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Familiar / 6 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-info fw-bold">4 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-danger fs-6">Desde $320 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 13, "nombre": "Cabaña Familiar Superior", "ubicacion": "Misiones", "precio": 320, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=13"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=14" class="card-img-top" alt="Doble Económica">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Doble Económica (Twin Beds)</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Dos camas individuales. La opción más económica para dos personas.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Doble / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-success fw-bold">18 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-secondary fs-6">Desde $95 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 14, "nombre": "Doble Económica (Twin Beds)", "ubicacion": "Misiones", "precio": 95, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=14"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=15" class="card-img-top" alt="Suite Ejecutiva">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Suite Ejecutiva - Corner</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Ubicada en la esquina, ofrece ventanas panorámicas y servicio de café VIP.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Suite / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-warning fw-bold">5 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-primary fs-6">Desde $280 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 15, "nombre": "Suite Ejecutiva - Corner", "ubicacion": "Misiones", "precio": 280, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=15"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=16" class="card-img-top" alt="Familiar 3 camas">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Familiar Triple - Espaciosa</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Tres camas matrimoniales o dos matrimoniales y una individual. Grande y cómoda.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Familiar / 4-6 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-success fw-bold">11 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-success fs-6">Desde $240 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 16, "nombre": "Familiar Triple - Espaciosa", "ubicacion": "Misiones", "precio": 240, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=16"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=17" class="card-img-top" alt="Individual Ciudad">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Individual Ciudad View</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Ubicada en pisos altos, perfecta para ver el amanecer sobre la ciudad.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Single / 1 persona</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-success fw-bold">14 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-info fs-6">Desde $90 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 17, "nombre": "Individual Ciudad View", "ubicacion": "Misiones", "precio": 90, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=17"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=18" class="card-img-top" alt="Suite Exterior">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Suite con Terraza y Spa</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Acceso a terraza privada con hidromasaje y servicio de masajes.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Suite / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-danger fw-bold">¡2 cupos restantes!</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-danger fs-6">Desde $550 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 18, "nombre": "Suite con Terraza y Spa", "ubicacion": "Misiones", "precio": 550, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=18"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=19" class="card-img-top" alt="Doble Twin">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Doble Twin Standard</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Dos camas individuales cómodas, ideal para amigos o colegas de viaje.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Doble / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-success fw-bold">17 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-success fs-6">Desde $120 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 19, "nombre": "Doble Twin Standard", "ubicacion": "Misiones", "precio": 120, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=19"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=20" class="card-img-top" alt="Familiar Interconectada">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Familiar Interconectada (2+2)</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Dos habitaciones dobles con puerta de conexión interna. Privacidad y cercanía.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Familiar / 4 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-warning fw-bold">6 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-warning text-dark fs-6">Desde $300 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 20, "nombre": "Familiar Interconectada (2+2)", "ubicacion": "Misiones", "precio": 300, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=20"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=21" class="card-img-top" alt="Individual Business Plus">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Individual Business Plus</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Cama doble, amplio escritorio y servicio de impresión a demanda incluido.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Single / 1 persona</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-info fw-bold">13 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-primary fs-6">Desde $115 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 21, "nombre": "Individual Business Plus", "ubicacion": "Misiones", "precio": 115, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=21"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=22" class="card-img-top" alt="Loft Cocina">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Loft con Cocina Americana</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Espacio moderno, cama King y barra desayunadora. Ideal para parejas foodie.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Doble / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-info fw-bold">4 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-info fs-6">Desde $190 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 22, "nombre": "Loft con Cocina Americana", "ubicacion": "Misiones", "precio": 190, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=22"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=23" class="card-img-top" alt="Doble Panorámica">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Doble con Balcón Panorámico</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Balcón amplio con vistas inigualables del valle o río (según disponibilidad).</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Doble / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-success fw-bold">10 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-success fs-6">Desde $155 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 23, "nombre": "Doble con Balcón Panorámico", "ubicacion": "Misiones", "precio": 155, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=23"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=24" class="card-img-top" alt="Suite King">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Suite King Premium</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Cama King Size de lujo, sábanas de algodón egipcio y servicio de despertador gourmet.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Suite / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-warning fw-bold">5 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-warning text-dark fs-6">Desde $350 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 24, "nombre": "Suite King Premium", "ubicacion": "Misiones", "precio": 350, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=24"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=25" class="card-img-top" alt="Familiar Litera">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Familiar Aventura (Litera)</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Ideal para familias con niños. Cama matrimonial y una litera resistente. </p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Familiar / 4 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-success fw-bold">15 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-info fs-6">Desde $175 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 25, "nombre": "Familiar Aventura (Litera)", "ubicacion": "Misiones", "precio": 175, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=25"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=26" class="card-img-top" alt="Individual Escritorio">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Individual Sencilla con Escritorio</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Básica y funcional para una persona, con un pequeño espacio de trabajo.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Single / 1 persona</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-success fw-bold">25 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-secondary fs-6">Desde $60 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 26, "nombre": "Individual Sencilla con Escritorio", "ubicacion": "Misiones", "precio": 60, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=26"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card offer-card shadow-sm h-100">
+                    <img src="https://source.unsplash.com/400x200/?hotel,room,suite&sig=27" class="card-img-top" alt="Doble VIP">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-success">Doble con Amenidades VIP</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt-fill"></i> La Hoja Dorada, Misiones
+                        </h6>
+                        <p class="card-text flex-grow-1">Cama King, toallas de felpa, batas de seda y vino espumante de cortesía.</p>
+                        <ul class="list-unstyled small mb-3">
+                            <li><strong>Tipo:</strong> Doble / 2 personas</li>
+                            <li><strong>Disponibilidad:</strong> <span class="text-danger fw-bold">8 cupos</span></li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge bg-danger fs-6">Desde $220 / noche</span>
+                            <a href="#" class="btn btn-sm btn-primary btn-reservar" 
+                               data-room-details='{"id": 27, "nombre": "Doble con Amenidades VIP", "ubicacion": "Misiones", "precio": 220, "imagen": "https://source.unsplash.com/400x200/?hotel,room,suite&sig=27"}'>
+                                Reservar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </div>
 
