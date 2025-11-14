@@ -1,19 +1,191 @@
- /* Estilos específicos para las tarjetas de oferta */
- .offer-card {
-     transition: transform 0.2s, box-shadow 0.2s;
-     border-radius: 0.75rem;
-     /* Bordes redondeados */
- }
+/* ========================================= */
+/* VARIABLES GLOBALES Y ESTILOS BASE */
+/* ========================================= */
+:root {
+    --color-primary-despegar: #4B0082;   /* Morado Oscuro de Marca */
+    --color-secondary-despegar: #007bff; /* Azul brillante para acción/énfasis */
+    --color-action-sale: #FF6700;        /* Naranja/Rojo para ofertas */
+    --color-text-dark: #333;
+    --color-light-bg: #f4f7fa;           /* Fondo muy claro y suave */
+    --color-card-bg: white;
+}
 
- .offer-card:hover {
-     transform: translateY(-5px);
-     /* Pequeño levantamiento al pasar el mouse */
-     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
-     /* Sombra más fuerte al pasar el mouse */
- }
+body {
+    background-color: var(--color-light-bg);
+    color: var(--color-text-dark);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
- /* Ajuste para el fondo, si se mantiene el estilo de tpi.css */
- body {
-     background: linear-gradient(135deg, #f8fafc, #e6eef8);
-     min-height: 100vh;
- }
+/* ========================================= */
+/* NAV BAR Y CABECERA (Estilo Despegar/Premium) */
+/* ========================================= */
+
+.navbar {
+    background-color: white !important;
+    /* Línea sutil morada en la parte inferior */
+    border-bottom: 3px solid var(--color-primary-despegar); 
+    padding: 15px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Sombra sutil */
+}
+
+.navbar-brand {
+    color: var(--color-primary-despegar) !important;
+    font-weight: 800 !important;
+    font-size: 1.8rem;
+}
+
+/* Botón Cerrar Sesión (Estilo limpio) */
+#btnCerrarSesion {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 8px 15px;
+    transition: background-color 0.3s;
+}
+
+/* ========================================= */
+/* SECCIÓN DE FILTROS (Caja de Búsqueda Flotante) */
+/* ========================================= */
+
+.container .row.mb-5.p-4.bg-light.rounded.shadow-sm {
+    /* Fondo limpio y moderno */
+    background: white !important;
+    border-radius: 15px !important;
+    padding: 30px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombra más fuerte */
+    border: 1px solid #e0e0e0;
+}
+
+/* Estilo para el encabezado del filtro */
+.container .row.mb-5 h4 {
+    color: var(--color-primary-despegar) !important;
+    font-weight: 700;
+}
+
+/* Estilo de los Labels */
+.container .row.mb-5 label {
+    color: var(--color-text-dark) !important;
+    font-weight: 600;
+}
+
+/* Inputs y Selects */
+#searchForm .form-control, 
+#searchForm .form-select {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    transition: border-color 0.3s;
+}
+
+/* Foco de Inputs */
+#searchForm .form-control:focus, 
+#searchForm .form-select:focus {
+    border-color: var(--color-secondary-despegar);
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+/* Botón de Aplicar Filtros */
+#searchForm .btn-primary {
+    background-color: var(--color-secondary-despegar);
+    border: none;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+}
+
+#searchForm .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* ========================================= */
+/* TARJETAS DE OFERTA (offer-card) */
+/* ========================================= */
+
+.offer-card {
+    background-color: var(--color-card-bg);
+    border: none; /* Quitamos el borde para un look más limpio */
+    border-radius: 15px; 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Sombra suave y prominente */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden; 
+    height: 100%;
+}
+
+.offer-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2); /* Sombra visual al pasar el ratón */
+}
+
+/* Imagen superior de la tarjeta (Foco visual) */
+.offer-card .card-img-top {
+    height: 200px; 
+    object-fit: cover; 
+    width: 100%;
+    /* Aseguramos que los bordes superiores coincidan con la tarjeta */
+    border-top-left-radius: 15px; 
+    border-top-right-radius: 15px;
+}
+
+.offer-card .card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.offer-card .card-title {
+    color: var(--color-text-dark); 
+    font-weight: 700;
+    font-size: 1.25rem; 
+    margin-bottom: 5px;
+}
+
+/* Subtítulo de ubicación */
+.offer-card .card-subtitle {
+    color: var(--color-primary-despegar); /* Morado para la marca/ubicación */
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+}
+
+/* Descripción */
+.offer-card .card-text {
+    color: #6c757d;
+    font-size: 0.95rem;
+    flex-grow: 1;
+}
+
+/* Lista de Detalles (Tipo, Disponibilidad) */
+.offer-card .list-unstyled {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0; /* Separador sutil */
+    font-size: 0.9rem;
+}
+
+/* Badge de Precio */
+.offer-card .badge {
+    background-color: var(--color-action-sale) !important; /* Naranja/Rojo llamativo para precios */
+    color: white !important;
+    font-size: 1.1rem !important;
+    font-weight: 800;
+    padding: 8px 14px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(255, 103, 0, 0.4);
+}
+
+/* Botón Reservar */
+.offer-card .btn-reservar {
+    background-color: var(--color-secondary-despegar); 
+    border-color: var(--color-secondary-despegar);
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 8px 18px;
+    transition: background-color 0.3s;
+}
+
+.offer-card .btn-reservar:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
