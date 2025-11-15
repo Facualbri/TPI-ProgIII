@@ -1,0 +1,69 @@
+/* Estilos específicos para la página de comprobante.html */
+
+/* Asegura que el color de fondo sea el mismo que el de carrito/usuario si no se usa body en comprobante */
+.comprobante-card {
+    border-radius: 15px !important;
+    overflow: hidden; /* Para que el header redondee correctamente */
+}
+
+.header-comprobante {
+    /* Fondo morado de la marca principal */
+    background-color: var(--color-primary-despegar) !important; 
+    border-bottom: 5px solid var(--color-action-sale); /* Línea de acento naranja */
+}
+
+.header-comprobante h1 {
+    font-weight: 700;
+}
+
+/* Títulos de sección */
+.section-title {
+    color: var(--color-primary-despegar); /* Morado de marca */
+    font-weight: 600;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 1rem;
+}
+
+/* Imagen de la habitación en el comprobante */
+.room-img {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
+
+/* Estilo para el resumen de pagos */
+.payment-summary .list-group-item {
+    border-color: #f0f0f0;
+}
+
+.total-final-comprobante {
+    background-color: #f0f8ff !important; /* Fondo sutil para destacar el total */
+    border-top: 2px dashed #ccc;
+    font-size: 1.25rem !important;
+}
+
+.total-final-comprobante .text-danger {
+    color: var(--color-action-sale) !important; /* Naranja/Rojo de acción para el total */
+}
+
+/* Estilo para impresión */
+@media print {
+    body {
+        background-color: white !important;
+    }
+    .container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    .comprobante-card {
+        box-shadow: none !important;
+        border: 1px solid #000;
+    }
+    /* Ocultar elementos no deseados en la impresión */
+    .d-grid.gap-2, .alert-info {
+        display: none !important;
+    }
+}
