@@ -19,29 +19,39 @@ export class Reservation {
   }
 }
 
+export async function crearReserva(userId, roomId, checkIn, checkOut) {
 
-export async function crearReserva(nuevaReserva) {
-  
-    try {
-        const response = await fetch(API_RESERVATIONS, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(nuevaReserva) // Enviamos el objeto de reserva como JSON
-        });
+  // Crear un objeto de la clase Reservation
+  const nuevaReserva = new Reservation(
+    null,          // id → lo genera MockAPI automáticamente
+    userId,
+    roomId,
+    checkIn,
+    checkOut,
+    "CONFIRMADA"   // estado fijo
+  );
 
-        if (!response.ok) {
-            const errorDetails = await response.text();
-            throw new Error(`Error ${response.status}: No se pudo crear la reserva en el servidor. Detalle: ${errorDetails}`);
-        }
+  try {
 
-        const reservaGuardada = await response.json();
+    // Enviar el objeto a la API
+    const response = await fetch(API_RESERVATIONS, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(nuevaReserva)
+    });
 
-        alert("Reserva creada correctamente. ID de Reserva: " + reservaGuardada.id);
-        
-        return { success: true, data: reservaGuardada }; 
-        
-    } catch (error) {
-        alert("Error al crear reserva: " + error.message);
-        return { success: false, message: error.message };
+    if (!response.ok) {
+      throw new Error("No se pudo crear la reserva en el servidor.");
     }
+
+    // Leer respuesta del backend
+    const reservaCreada = await response.json();
+    alert("Reserva creada correctamente. ID: " + reservaCreada.id);
+
+    return reservaCreada;
+
+  } catch (error) {
+    alert("Error al crear reserva: " + error.message);
+  }
 }
+

@@ -131,14 +131,6 @@ function controlarBotonCerrarSesion() {
         }
     }
 }
-// Controlar el botón de cerrar sesión al cargar la página
-document.addEventListener("DOMContentLoaded", () => {
-    // Si el elemento roomContainer existe (estamos en pantallaUsuario), ejecutar ambas lógicas
-    if (document.getElementById("roomContainer")) {
-        manejarReserva(); // Maneja la lógica de clic en reservar (con verificación de login)
-        controlarBotonCerrarSesion(); // Controla la visibilidad del botón de cerrar sesión
-    }
-});
 //conexion boton cerrar sesion con funcion cerrarSesion
 const btnCerrar = document.getElementById("btnCerrarSesion");
 // El código para la conexión del botón "Cerrar Sesión" debe mantenerse:
@@ -174,182 +166,201 @@ function ocultarYMostrarPass(idInput, idBoton) {
   ocultarYMostrarPass("passwordRegister", "ocultarPassRegister");
   ocultarYMostrarPass("passwordLogin", "ocultarPassLogin");
 
-// Este código debe estar en el cuerpo principal de tpi.js,
-// cerca de tus otras funciones como loginUsuario o cerrarSesion.
+// ESTE DOM CONTIENE FUNCION CERRAR SESION, MANEJO BOTON CERRAR SESION Y BOTONES RESERVAR
+document.addEventListener("DOMContentLoaded", () => {
 
-// Función de manejo del click en los botones de "Reservar" (pantallaUsuario.html)
-function manejarReserva() {
-    const botonesReservar = document.querySelectorAll(".btn-reservar");
+    // FUNCIÓN CERRAR SESIÓN
+    function cerrarSesion() {
+        localStorage.removeItem("usuarioActivo");
+        window.location.reload();
+    }
+    // MOSTRAR / OCULTAR BOTÓN CERRAR SESIÓN
+    function controlarBotonCerrarSesion() {
+        const btnCerrar = document.getElementById("btnCerrarSesion");
+        const usuarioActivo = localStorage.getItem("usuarioActivo");
 
-    botonesReservar.forEach(boton => {
-        boton.addEventListener("click", (e) => {
+        if (!btnCerrar) return;
+
+        if (usuarioActivo) {
+            btnCerrar.style.display = "block";
+        } else {
+            btnCerrar.style.display = "none";
+        }
+    }
+
+    // Se ejecuta al cargar la página
+    controlarBotonCerrarSesion();
+
+    // Conectar botón cerrar sesión
+    const btnCerrarSesion = document.getElementById("btnCerrarSesion");
+    if (btnCerrarSesion) {
+        btnCerrarSesion.addEventListener("click", (e) => {
+            e.preventDefault();
+            cerrarSesion();
+        });
+    }
+    // MANEJAR BOTONES "RESERVAR"
+    document.addEventListener("click", (e) => {
+        if (e.target.classList.contains("btn-reservar")) {
             e.preventDefault();
 
             const usuarioActivo = localStorage.getItem("usuarioActivo");
 
+            // ✔ Si NO hay sesión → login
             if (!usuarioActivo) {
-                alert("Debes iniciar sesión para realizar una reserva.");
-                window.location.href = "../HTML/login.html"; 
+                window.location.href = "/HTML/login.html";
                 return;
             }
 
-            const roomDetailsJson = boton.getAttribute("data-room-details");
-            
-            if (roomDetailsJson) {
-                const roomDetails = JSON.parse(roomDetailsJson);
-                
-                // Guardar los detalles en localStorage para que carrito.html los recupere
-                localStorage.setItem("reservaTemporal", JSON.stringify(roomDetails));
+            // ✔ Si hay sesión → guardar datos habitación
+            const roomData = e.target.getAttribute("data-room-details");
 
-                window.location.href = "../HTML/carrito.html";
-            } else {
+            if (!roomData) {
                 alert("Error: No se encontraron los detalles de la habitación.");
+                return;
             }
-        });
+
+            localStorage.setItem("reservaTemporal", roomData);
+
+            // Ir al carrito
+            window.location.href = "/HTML/carrito.html";
+        }
     });
-}
 
-// ----------------------------------------------------
-
-// Función de inicialización del Carrito (carrito.html)
-export function inicializarCarrito() {
-    const detallesContainer = document.getElementById('reservaDetalles');
-    
-    if (!detallesContainer) {
-        return; // Sale si no estamos en carrito.html
+    // ======================================================
+    // 4️⃣ INICIALIZAR CARRITO (solo si estamos en carrito.html)
+    // ======================================================
+    const detallesContainer = document.getElementById("reservaDetalles");
+    if (detallesContainer) {
+        inicializarCarrito();
     }
 
-    const reservaJson = localStorage.getItem('reservaTemporal');
-    const checkInInput = document.getElementById('checkInDate');
-    const nochesInput = document.getElementById('nroNochesInput');
-    const checkOutSpan = document.getElementById('checkOutDate');
-    const btnConfirmar = document.getElementById('btnConfirmarReserva');
-    const estadoReservaSpan = document.getElementById('estadoReserva');
+});
 
-    let precioNoche = 0;
-    const IMPUESTO_PORCENTAJE = 0.10; // 10% de impuestos
-    
-    // --- FUNCIÓN DE CÁLCULO Y ACTUALIZACIÓN EN TIEMPO REAL ---
-    const actualizarResumen = () => {
+// INICIALIZAR CARRITO — ESTA FUNCIÓN QUEDA FUERA DEL DOMCONTENTLOADED
+export function inicializarCarrito() {
+
+    const detallesContainer = document.getElementById("reservaDetalles");
+    const reservaJson = localStorage.getItem("reservaTemporal");
+
+    const checkInInput = document.getElementById("checkInDate");
+    const nochesInput = document.getElementById("nroNochesInput");
+    const checkOutSpan = document.getElementById("checkOutDate");
+    const btnConfirmar = document.getElementById("btnConfirmarReserva");
+    const estadoReservaSpan = document.getElementById("estadoReserva");
+
+    if (!reservaJson) {
+        detallesContainer.innerHTML = `
+            <div class="alert alert-danger w-100">
+                ERROR: No se encontraron detalles.
+            </div>`;
+        return;
+    }
+
+    const reserva = JSON.parse(reservaJson);
+    let precioNoche = reserva.precio;
+    const IMPUESTO_PORCENTAJE = 0.10;
+
+    // FUNCIÓN PARA CALCULAR TOTAL + CHECKOUT
+    function actualizarResumen() {
         const noches = parseInt(nochesInput.value) || 0;
         const checkInValue = checkInInput.value;
-        
-        // 1. Manejo y Cálculo de Fechas
-        let checkOutText = 'Pendiente';
+
+        // Calcular checkout
+        let checkOutText = "Pendiente";
         if (checkInValue) {
             const checkIn = new Date(checkInValue);
             checkIn.setMinutes(checkIn.getMinutes() + checkIn.getTimezoneOffset());
-            
+
             let checkOut = new Date(checkIn);
             checkOut.setDate(checkIn.getDate() + noches);
-            
-            const day = String(checkOut.getDate()).padStart(2, '0');
-            const month = String(checkOut.getMonth() + 1).padStart(2, '0');
+
+            const day = String(checkOut.getDate()).padStart(2, "0");
+            const month = String(checkOut.getMonth() + 1).padStart(2, "0");
             const year = checkOut.getFullYear();
+
             checkOutText = `${day}/${month}/${year}`;
         }
         checkOutSpan.textContent = checkOutText;
 
-        // 2. CÁLCULO DE COSTOS
-        // Si noches es 0 o precio es 0, los totales serán 0.
+        // Cálculo total
         const subtotal = precioNoche * noches;
         const impuestos = subtotal * IMPUESTO_PORCENTAJE;
-        const totalFinal = subtotal + impuestos;
-        
-        // 3. ACTUALIZAR INTERFAZ
-        document.getElementById('nroNoches').textContent = noches;
-        document.getElementById('textoNoches').textContent = `${noches} noches`;
-        document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-        document.getElementById('impuestos').textContent = `$${impuestos.toFixed(2)}`;
-        document.getElementById('totalFinal').textContent = `$${totalFinal.toFixed(2)}`;
+        const total = subtotal + impuestos;
 
-        // Habilitar botón de confirmación
-        btnConfirmar.disabled = !(checkInInput.value && noches > 0 && precioNoche > 0);
-    };
-    
-    // --- LÓGICA DE ENVÍO A LA API ---
-    const confirmarReservaYEnviar = async () => {
-        const noches = parseInt(nochesInput.value);
-        const checkInDate = checkInInput.value;
-        const checkOutDateText = checkOutSpan.textContent;
-        const reserva = JSON.parse(localStorage.getItem('reservaTemporal'));
-        const totalFinalText = document.getElementById('totalFinal').textContent;
+        document.getElementById("precioNoche").textContent = `$${precioNoche}`;
+        document.getElementById("subtotal").textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById("impuestos").textContent = `$${impuestos.toFixed(2)}`;
+        document.getElementById("totalFinal").textContent = `$${total.toFixed(2)}`;
+        document.getElementById("textoNoches").textContent = `${noches} noches`;
 
-        if (noches <= 0 || !checkInDate || !reserva) {
-            alert('🚨 Por favor, completa la fecha de Check-in y la cantidad de noches.');
-            return;
-        }
-        
-        const usuarioActivo = localStorage.getItem("usuarioActivo");
-        if (!usuarioActivo) {
-            alert("🚨 Debes iniciar sesión para confirmar la reserva.");
-            return;
-        }
-        
-        const userId = JSON.parse(usuarioActivo).id;
+        btnConfirmar.disabled = !(checkInValue && noches > 0);
+    }
 
-        const nuevaReserva = {
-            userId: userId, 
-            roomId: reserva.id,
-            checkIn: checkInDate,
-            checkOut: checkOutDateText, 
-            noches: noches,
-            precioTotal: parseFloat(totalFinalText.replace('$', '')),
-            estado: 'CONFIRMADA'
-        };
+    // CARGAR DETALLES DE HABITACIÓN
+    detallesContainer.innerHTML = `
+        <img src="${reserva.imagen}" class="rounded me-3" style="width: 100px; height: 80px;">
+        <div>
+            <h5>${reserva.nombre}</h5>
+            <p class="text-muted">Ubicación: ${reserva.ubicacion}</p>
+        </div>
+    `;
 
-        btnConfirmar.disabled = true; 
-        
-        // Llama a la función modular (asumiendo que crearReserva está importada de Reserva.js)
-        const resultado = await crearReserva(nuevaReserva);
+    // EVENTOS PARA CALCULAR AUTOMÁTICO
+    checkInInput.addEventListener("change", actualizarResumen);
+    nochesInput.addEventListener("input", actualizarResumen);
 
-        if (resultado.success) {
-            localStorage.removeItem('reservaTemporal'); 
-            
-            estadoReservaSpan.textContent = 'CONFIRMADA';
-            estadoReservaSpan.className = 'fw-bold text-success';
-            
-            alert(`✅ ¡Reserva CONFIRMADA! ID: ${resultado.data.id || 'N/A'}`);
-        } else {
-            alert(`❌ Error al confirmar: ${resultado.message}`);
-            btnConfirmar.disabled = false;
-        }
-    };
+    actualizarResumen();
+}
 
+//CONFIRMAR RESERVA
+export async function confirmarReserva() {
 
-    // --- INICIALIZACIÓN DE DATOS Y CONEXIÓN DE EVENTOS ---
-    if (reservaJson) {
-        const reserva = JSON.parse(reservaJson);
-        precioNoche = reserva.precio; 
-        
-        document.getElementById('precioNoche').textContent = `$${precioNoche.toFixed(2)}`;
+    const usuarioActivo = JSON.parse(localStorage.getItem("usuarioActivo"))
+    // Obtener detalles de la reserva temporal
+    const reserva = JSON.parse(localStorage.getItem("reservaTemporal"));
+    if (!reserva) {
+        alert("No se encontraron los datos de la habitación.");
+        return;
+    }
 
-        // Renderizar detalles de la habitación (Carga de detalles)
-        detallesContainer.innerHTML = `
-            <img src="${reserva.imagen}" alt="Imagen del Hotel" class="rounded me-3" style="width: 100px; height: 80px; object-fit: cover;">
-            <div>
-                <h5 class="mb-1">${reserva.nombre}</h5>
-                <p class="text-muted mb-0">Hotel: La Hoja Dorada | Ubicación: ${reserva.ubicacion}</p>
-            </div>
-        `;
+    // Obtener datos del formulario
+    const checkIn = document.getElementById("checkInDate").value;
+    const checkOut = document.getElementById("checkOutDate").textContent;
 
-        // 1. CONEXIÓN PARA EL CÁLCULO EN TIEMPO REAL
-        checkInInput.addEventListener('change', actualizarResumen);
-        nochesInput.addEventListener('input', actualizarResumen);
-        nochesInput.addEventListener('keyup', actualizarResumen); 
-        
-        // 2. Conexión del botón Confirmar
-        btnConfirmar.addEventListener('click', confirmarReservaYEnviar);
+    if (!checkIn || checkOut === "Pendiente") {
+        alert("Por favor completá la fecha de entrada y la cantidad de noches.");
+        return;
+    }
 
-        // Ejecutar el cálculo inicial al cargar
-        actualizarResumen();
+    // Crear reserva en la API
+    const resultado = await crearReserva(
+        usuarioActivo.id,   
+        reserva.id,         
+        checkIn,            
+        checkOut            
+    );
 
-    } else {
-        detallesContainer.innerHTML = `
-            <div class="alert alert-danger w-100" role="alert">
-                ❌ ERROR: No se encontraron detalles.
-            </div>
-        `;
-        btnConfirmar.disabled = true;
+    // Si se creó correctamente
+    if (resultado) {
+        const estadoReservaSpan = document.getElementById("estadoReserva");
+
+        estadoReservaSpan.textContent = "CONFIRMADA";
+        estadoReservaSpan.classList = "fw-bold text-success";
+
+        // Limpiar datos temporales
+        localStorage.removeItem("reservaTemporal");
+
+        alert("Reserva confirmada ✔");
     }
 }
+//ENLAZAR BOTON CONFIRMAR RESERVA
+const btnConfirmar = document.getElementById("btnConfirmarReserva");
+if (btnConfirmar) {
+    btnConfirmar.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await confirmarReserva();
+    }); 
+}
+
+
