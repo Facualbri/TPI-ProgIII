@@ -55,3 +55,28 @@ export async function crearReserva(userId, roomId, checkIn, checkOut) {
   }
 }
 
+export async function borrarTodasLasReservas() {
+  try {
+    const res = await fetch(API_RESERVATIONS);
+
+    if (!res.ok) {
+      throw new Error("No se pudo obtener la lista de reservas");
+    }
+
+    const reservas = await res.json();
+
+    for (const reserva of reservas) {
+      await fetch(`${API_RESERVATIONS}/${reserva.id}`, {
+        method: "DELETE"
+      });
+      console.log(`Reserva ${reserva.id} eliminada`);
+    }
+
+    console.log("Todas las reservas fueron eliminadas ✔️");
+
+  } catch (error) {
+    console.error("Error al borrar reservas:", error);
+  }
+}
+//borrarTodasLasReservas();
+

@@ -3,6 +3,7 @@ import { Room, API_ROOMS } from './Habitacion.js';
 import { Reservation, API_RESERVATIONS } from './Reserva.js';
 import { crearUsuario } from './Usuario.js';
 import { crearReserva } from './Reserva.js';
+import { roomsExtraData } from "./roomsExtraData.js";
 
 export async function obtenerUsuarios() {
   try {
@@ -118,7 +119,7 @@ export function cerrarSesion() {
 }
 
 // Función para mostrar/ocultar el botón "Cerrar Sesión"
-function controlarBotonCerrarSesion() {
+export function controlarBotonCerrarSesion() {
   const btnCerrar = document.getElementById("btnCerrarSesion");
   const usuarioActivo = localStorage.getItem("usuarioActivo");
 
@@ -131,6 +132,7 @@ function controlarBotonCerrarSesion() {
     }
   }
 }
+
 //conexion boton cerrar sesion con funcion cerrarSesion
 const btnCerrar = document.getElementById("btnCerrarSesion");
 // El código para la conexión del botón "Cerrar Sesión" debe mantenerse:
@@ -142,7 +144,7 @@ if (btnCerrar) {
 }
 
 // ocular/mostrar contraseña en pantallaprincipal y registro
-function ocultarYMostrarPass(idInput, idBoton) {
+export function ocultarYMostrarPass(idInput, idBoton) {
   const input = document.getElementById(idInput);
   const boton = document.getElementById(idBoton);
 
@@ -281,7 +283,13 @@ export function inicializarCarrito() {
 
       checkOutText = `${day}/${month}/${year}`;
     }
+
     checkOutSpan.textContent = checkOutText;
+
+    //guardar fechas y noches para el comprobante
+    localStorage.setItem("checkInReserva", checkInValue);
+    localStorage.setItem("checkOutReserva", checkOutText);
+    localStorage.setItem("nochesReserva", noches);
 
     // Cálculo total
     const subtotal = precioNoche * noches;
@@ -316,28 +324,23 @@ export function inicializarCarrito() {
 //CONFIRMAR RESERVA
 export async function confirmarReserva() {
 
-  const usuarioActivo = JSON.parse(localStorage.getItem("usuarioActivo"))
-  // Obtener detalles de la reserva temporal
+  const usuarioActivo = JSON.parse(localStorage.getItem("usuarioActivo"));
   const reserva = JSON.parse(localStorage.getItem("reservaTemporal"));
+
   if (!reserva) {
     alert("No se encontraron los datos de la habitación.");
     return;
   }
 
-  // Obtener datos del formulario (Usamos los datos guardados en localStorage por inicializarCarrito)
-  const checkIn = localStorage.getItem("checkInReserva"); // Usa el valor guardado
-  const checkOut = localStorage.getItem("checkOutReserva"); // Usa el valor guardado
+  const checkIn = localStorage.getItem("checkInReserva");
+  const checkOut = localStorage.getItem("checkOutReserva");
 
-  // Usamos el input original para la validación, por si no se llamó a inicializarCarrito()
-  const checkInInput = document.getElementById("checkInDate").value;
-  const checkOutText = document.getElementById("checkOutDate").textContent;
-
-  if (!checkInInput || checkOutText === "Pendiente") {
-    alert("Por favor completá la fecha de entrada y la cantidad de noches.");
+  if (!checkIn || !checkOut || checkOut === "Pendiente") {
+    alert("Completá correctamente las fechas.");
     return;
   }
 
-  // Crear reserva en la API
+  // Crear la reserva en la API
   const resultado = await crearReserva(
     usuarioActivo.id,
     reserva.id,
@@ -345,22 +348,22 @@ export async function confirmarReserva() {
     checkOut
   );
 
-  // Si se creó correctamente
-  if (resultado) {
-    const estadoReservaSpan = document.getElementById("estadoReserva");
-
-    estadoReservaSpan.textContent = "CONFIRMADA";
-    estadoReservaSpan.classList.add("text-success"); // Usamos add por si ya tiene otra clase
-
-    // No limpiamos reservaTemporal aquí, ya que el comprobante la necesita.
-    // La limpiaremos después de que el comprobante se cargue o si el usuario vuelve a buscar.
-
-    alert("Reserva confirmada ✔");
-
-    // 🚨 PASO CLAVE: Redirigir al comprobante
-    window.location.href = "/HTML/comprobante.html";
+  if (!resultado) {
+    alert("Error al confirmar");
+    return;
   }
+
+  // Marcar habitación como reservada en MockAPI
+await fetch(`${API_ROOMS}/${reserva.id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ disponible: false })
+});
+
+  // NO BORRAR AÚN LOS DATOS
+  window.location.href = "/HTML/comprobante.html";
 }
+
 //ENLAZAR BOTON CONFIRMAR RESERVA
 const btnConfirmar = document.getElementById("btnConfirmarReserva");
 if (btnConfirmar) {
@@ -370,9 +373,8 @@ if (btnConfirmar) {
   });
 }
 
-function cargarComprobante() {
+export function cargarComprobante() {
   // Intentamos recuperar la última reserva que debería haberse guardado tras la confirmación
-  const ultimaReservaJson = localStorage.getItem("ultimaReservaConfirmada");
   const reservaTemporalJson = localStorage.getItem("reservaTemporal");
   const usuarioActivoJson = localStorage.getItem("usuarioActivo");
 
@@ -445,4 +447,204 @@ document.addEventListener("DOMContentLoaded", () => {
   if (comprobanteCard) {
     cargarComprobante();
   }
+});
+
+export async function cargarHabitaciones() {
+  const container = document.getElementById("roomContainer");
+  if (!container) return;
+
+  container.innerHTML = "<p>Cargando habitaciones...</p>";
+
+  // ⏳ Esperar 2 segundos antes de cargar
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  try {
+    const res = await fetch(API_ROOMS);
+    const rooms = await res.json();
+
+    container.innerHTML = ""; // limpiar
+
+    rooms.forEach(room => {
+
+      const extra = roomsExtraData[room.id];
+
+      if (!extra) {
+        console.warn("No hay datos extra para room:", room.id);
+        return;
+      }
+
+      const disponibleTexto = room.disponible ? 
+        `<span class="text-success fw-bold">Disponible</span>` :
+        `<span class="text-danger fw-bold">Reservada</span>`;
+
+      const boton =
+        room.disponible
+          ? `<a href="#" class="btn btn-sm btn-primary btn-reservar"
+               data-room-details='${JSON.stringify({
+                 id: room.id,
+                 nombre: extra.nombre,
+                 ubicacion: extra.ubicacion,
+                 precio: room.precio,
+                 imagen: extra.imagen,
+                 tipo: room.tipo
+               })}'>
+               Reservar
+             </a>`
+          : `<button class="btn btn-sm btn-secondary" disabled>Ocupada</button>`;
+
+      // CARD HTML FINAL
+      const card = `
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card offer-card shadow-sm h-100">
+            <img src="${extra.imagen}" class="card-img-top">
+            <div class="card-body d-flex flex-column">
+              
+              <h5 class="card-title text-success">${extra.nombre}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                <i class="bi bi-geo-alt-fill"></i> ${extra.ubicacion}
+              </h6>
+
+              <p class="card-text flex-grow-1">${extra.descripcion}</p>
+
+              <ul class="list-unstyled small mb-3">
+                <li><strong>Tipo:</strong> ${room.tipo}</li>
+                <li><strong>Disponibilidad:</strong> ${disponibleTexto}</li>
+              </ul>
+
+              <div class="d-flex justify-content-between align-items-center mt-auto">
+                <span class="badge bg-success fs-6">Desde $${room.precio} / noche</span>
+                ${boton}
+              </div>
+
+            </div>
+          </div>
+        </div>
+      `;
+
+      container.innerHTML += card;
+    });
+
+  } catch (err) {
+    console.error("Error cargando habitaciones:", err);
+    container.innerHTML = "<p>Error al cargar habitaciones.</p>";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const container = document.getElementById("roomContainer");
+
+  if (container) {
+    cargarHabitaciones();
+  }
+
+});
+
+export async function mostrarReservasUsuario() {
+    const usuarioActivo = JSON.parse(localStorage.getItem("usuarioActivo"));
+    const container = document.getElementById("reservasContainer");
+    const sinMsg = document.getElementById("sinReservasMsg");
+
+    if (!usuarioActivo || !container) return;
+
+    try {
+        // 1. Obtener TODAS las reservas
+        const res = await fetch(API_RESERVATIONS);
+        const reservas = await res.json();
+
+        // 2. Filtrar las del usuario activo
+        const misReservas = reservas.filter(r => r.userId == usuarioActivo.id);
+
+        // 3. Si no tiene reservas → mostrar mensaje
+        if (misReservas.length === 0) {
+            sinMsg.classList.remove("d-none");
+            return;
+        }
+
+        // 4. Obtener habitaciones para poder mostrar datos
+        const roomsRes = await fetch(API_ROOMS);
+        const rooms = await roomsRes.json();
+
+        container.innerHTML = "";
+
+        // 5. Renderizar cada reserva
+        misReservas.forEach(reserva => {
+
+            const room = rooms.find(r => r.id == reserva.roomId);
+            if (!room) return;
+
+            container.innerHTML += `
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+
+                        <div class="card-body">
+
+                            <h5 class="card-title">Reserva #${reserva.id}</h5>
+                            <p><strong>Habitación:</strong> ${room.tipo}</p>
+                            <p><strong>Check-In:</strong> ${reserva.checkIn}</p>
+                            <p><strong>Check-Out:</strong> ${reserva.checkOut}</p>
+                            <p><strong>Estado:</strong> 
+                                <span class="badge bg-${reserva.estado === "CANCELADA" ? "danger" : "success"}">
+                                    ${reserva.estado}
+                                </span>
+                            </p>
+
+                            ${reserva.estado !== "CANCELADA"
+                                ? `<button class="btn btn-danger btn-cancelar" data-id="${reserva.id}" data-room="${room.id}">
+                                        Cancelar Reserva
+                                   </button>`
+                                : `<button class="btn btn-secondary" disabled>Cancelada</button>`
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+            `;
+        });
+
+    } catch (error) {
+        console.error("Error cargando reservas:", error);
+    }
+}
+
+export async function cancelarReserva(idReserva, idRoom) {
+    try {
+        // 1. Marcar reserva como cancelada
+        await fetch(`${API_RESERVATIONS}/${idReserva}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ estado: "CANCELADA" })
+        });
+
+        // 2. Liberar la habitación
+        await fetch(`${API_ROOMS}/${idRoom}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ disponible: true })
+        });
+
+        alert("Reserva cancelada correctamente.");
+        location.reload();
+
+    } catch (error) {
+        alert("Error al cancelar la reserva.");
+        console.error(error);
+    }
+}
+//CONEXION BOTONES CANCELAR RESERVA
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("btn-cancelar")) {
+        const idReserva = e.target.getAttribute("data-id");
+        const idRoom = e.target.getAttribute("data-room");
+
+        cancelarReserva(idReserva, idRoom);
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const reservasContainer = document.getElementById("reservasContainer");
+    if (reservasContainer) {
+        mostrarReservasUsuario();
+    }
 });
