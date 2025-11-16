@@ -35,8 +35,42 @@ export async function obtenerReservas() {
   }
 }
 
+export function protegerPantallaUsuario() {
+    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+
+    // Si es admin NO puede ver pantallaUsuario
+    if (usuario && usuario.role && usuario.role.toUpperCase() === "ADMIN") {
+        window.location.href = "../HTML/login.html";
+        return;
+    }
+
+    // SI NO HAY USUARIO → permitir ver la página como invitado
+    // (solo ocultamos botones desde otra función)
+}
+
+
+
 export async function loginUsuario(email, password) {
   try {
+    // ✔ ADMIN HARDCODEADO
+    if (email.trim().toLowerCase() === "admin@hotel.com" && password === "admin123") {
+
+      const adminUser = {
+        id: "ADMIN",
+        nombre: "Administrador",
+        email: "admin@hotel.com",
+        role: "ADMIN"
+      };
+
+      // guardamos al admin en localStorage
+      localStorage.setItem("usuarioActivo", JSON.stringify(adminUser));
+
+      // redirigir al admin
+      window.location.href = "../HTML/pantallaAdmin.html";
+      return adminUser;
+    }
+
+    // ✔ SI NO ES ADMIN → validación normal en MockAPI
     const res = await fetch(API_USERS);
     const usuarios = await res.json();
 
@@ -45,27 +79,27 @@ export async function loginUsuario(email, password) {
       u.password === password
     );
 
-    if (usuario) {
-      console.log("Login exitoso:", usuario);
-
-      // Guardar en localStorage
-      localStorage.setItem("usuarioActivo", JSON.stringify(usuario));
-
-      // Redirigir según el rol
-      if (usuario.role === "ADMIN") {
-        window.location.href = "../HTML/pantallaAdmin.html";
-      } else {
-        window.location.href = "../HTML/pantallausuario.html";
-      }
-
-      return usuario;
-    } else {
+    if (!usuario) {
       alert("Usuario o contraseña incorrectos");
       return null;
     }
+
+    // Guardar en localStorage
+    localStorage.setItem("usuarioActivo", JSON.stringify(usuario));
+
+    // Redirigir según el rol (por si más adelante hay admin en la API)
+    if (usuario.role === "ADMIN") {
+      window.location.href = "../HTML/pantallaAdmin.html";
+    } else {
+      window.location.href = "../HTML/pantallausuario.html";
+    }
+
+    return usuario;
+
   } catch (error) {
     console.error("Error en login:", error);
-  }
+    alert("Error al iniciar sesión.");
+  }
 }
 //conexion funcion loginUsuario con boton
 const botonLogin = document.getElementById("loginForm");
@@ -111,27 +145,41 @@ if (registerForm) {
   });
 }
 export function cerrarSesion() {
-  // borrar usuario en localStorage
-  localStorage.removeItem("usuarioActivo");
+    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
 
-  // redirigir a pantallaPrincipal
-  window.location.href = "../HTML/pantallausuario.html";
+    // borrar siempre
+    localStorage.removeItem("usuarioActivo");
+
+    // si era admin → login
+    if (usuario && usuario.role && usuario.role.toUpperCase() === "ADMIN") {
+        window.location.href = "../HTML/login.html";
+        return;
+    }
+
+    // si era usuario común → pantallaUsuario como invitado
+    window.location.href = "../HTML/pantallausuario.html";
 }
+
+
 
 // Función para mostrar/ocultar el botón "Cerrar Sesión"
 export function controlarBotonCerrarSesion() {
-  const btnCerrar = document.getElementById("btnCerrarSesion");
-  const usuarioActivo = localStorage.getItem("usuarioActivo");
+    const btnCerrar = document.getElementById("btnCerrarSesion");
+    const btnLogin = document.getElementById("btnLoginUsuario");
 
-  if (btnCerrar) {
-    // Si hay un usuario en localStorage (sesión iniciada)
-    if (usuarioActivo) {
-      btnCerrar.style.display = 'block'; // Muestra el botón
+    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+
+    if (!btnCerrar) return;
+
+    if (usuario) {
+        btnCerrar.style.display = "block";
+        if (btnLogin) btnLogin.style.display = "none";
     } else {
-      btnCerrar.style.display = 'none'; // Oculta el botón
+        btnCerrar.style.display = "none";
+        if (btnLogin) btnLogin.style.display = "block";
     }
-  }
 }
+
 
 //conexion boton cerrar sesion con funcion cerrarSesion
 const btnCerrar = document.getElementById("btnCerrarSesion");
@@ -455,27 +503,30 @@ export async function cargarHabitaciones() {
 
   container.innerHTML = "<p>Cargando habitaciones...</p>";
 
-  // ⏳ Esperar 2 segundos antes de cargar
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  await new Promise(resolve => setTimeout(resolve, 1000));
 
   try {
     const res = await fetch(API_ROOMS);
     const rooms = await res.json();
 
-    container.innerHTML = ""; // limpiar
+    // 🔥 Mezclar roomsExtraData original + localStorage
+    const extrasLocal = JSON.parse(localStorage.getItem("roomsExtraData")) || {};
+    const extras = { ...roomsExtraData, ...extrasLocal };
+
+    container.innerHTML = "";
 
     rooms.forEach(room => {
 
-      const extra = roomsExtraData[room.id];
+      const extra = extras[room.id];
 
       if (!extra) {
         console.warn("No hay datos extra para room:", room.id);
         return;
       }
 
-      const disponibleTexto = room.disponible ? 
-        `<span class="text-success fw-bold">Disponible</span>` :
-        `<span class="text-danger fw-bold">Reservada</span>`;
+      const disponibleTexto = room.disponible
+        ? `<span class="text-success fw-bold">Disponible</span>`
+        : `<span class="text-danger fw-bold">Reservada</span>`;
 
       const boton =
         room.disponible
@@ -485,18 +536,18 @@ export async function cargarHabitaciones() {
                  nombre: extra.nombre,
                  ubicacion: extra.ubicacion,
                  precio: room.precio,
-                 imagen: roomsExtraData[room.id].imagen,
+                 imagen: extra.imagen,
                  tipo: room.tipo
                })}'>
                Reservar
              </a>`
           : `<button class="btn btn-sm btn-secondary" disabled>Ocupada</button>`;
-      // CARD HTML FINAL
-   
+
       const card = `
         <div class="col-md-6 col-lg-4 mb-4">
           <div class="card offer-card shadow-sm h-100">
             <img src="${extra.imagen}" class="card-img-top">
+
             <div class="card-body d-flex flex-column">
               
               <h5 class="card-title text-success">${extra.nombre}</h5>
@@ -648,3 +699,85 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarReservasUsuario();
     }
 });
+
+export function configurarFormularioAdmin() {
+    const form = document.getElementById("addRoomForm");
+    if (!form) return;
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const nombre = document.getElementById("roomName").value;
+        const descripcion = document.getElementById("roomDescription").value;
+        const tipo = document.getElementById("roomType").value;
+        const precio = Number(document.getElementById("roomPrice").value);
+
+        const imagenFile = document.getElementById("roomImage").files[0];
+
+        if (!imagenFile) {
+            alert("Subí una imagen.");
+            return;
+        }
+
+        // Convertir imagen a Base64
+        const imagenBase64 = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(imagenFile);
+        });
+
+        // Obtener habitaciones existentes
+        const res = await fetch(API_ROOMS);
+        const rooms = await res.json();
+
+        const newId = String(rooms.length + 1);
+
+        // Enviar a API (info principal)
+        const nuevaHabitacion = {
+            id: newId,
+            tipo,
+            precio,
+            disponible: true
+        };
+
+        await fetch(API_ROOMS, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(nuevaHabitacion)
+        });
+
+        // ===============================
+        // 🔥 GUARDAR EXTRA DATA CORRECTO
+        // ===============================
+        const extrasLocal = JSON.parse(localStorage.getItem("roomsExtraData")) || {};
+
+        extrasLocal[newId] = {
+            nombre,
+            descripcion,
+            ubicacion: "Misiones",
+            imagen: imagenBase64
+        };
+
+        localStorage.setItem("roomsExtraData", JSON.stringify(extrasLocal));
+
+        // Señal para refrescar en pantallausuario
+        localStorage.setItem("refreshRooms", "true");
+
+        alert("Habitación agregada con éxito.");
+
+        form.reset();
+
+        // ===============================
+        // 🔥 AGREGAR CARD EN TIEMPO REAL
+        // ===============================
+        if (typeof cargarHabitaciones === "function") {
+            cargarHabitaciones();
+        }
+    });
+}
+
+configurarFormularioAdmin();
+
+//DE ACA PARA ABAJO AGREGO NUEVO 
+
+

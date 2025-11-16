@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -11,36 +12,65 @@
 </head>
 
 <body>
+
     <main class="card shadow-sm">
         <div class="card-body p-4">
+
             <h4 class="card-title mb-4 text-center">Recuperar Contraseña 🔒</h4>
 
-            <form id="recoverForm" method="POST" action="/send-recovery-link">
-                
-                <p class="text-muted small mb-3 text-center">
-                    Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
-                </p>
+            <p class="text-muted small text-center mb-4">
+                Ingresá tu correo y te enviaremos el enlace para cambiar tu contraseña.
+            </p>
 
-                <div class="mb-4">
-                    <label for="email" class="form-label">Correo electrónico</label>
+            <form id="recoverForm">
+
+                <div class="mb-3">
+                    <label class="form-label">Correo electrónico</label>
                     <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                        <input type="email" id="email" name="email" class="form-control" required placeholder="tu@ejemplo.com" />
+                        <span class="input-group-text">
+                            <i class="bi bi-envelope-fill"></i>
+                        </span>
+                        <input type="email" id="email" class="form-control" required placeholder="tu@ejemplo.com">
                     </div>
                 </div>
 
-                <div class="d-grid mb-3">
-                    <button type="submit" class="btn btn-warning">Enviar Enlace</button>
-                </div>
+                <button class="btn btn-warning w-100 mb-3">
+                    Validar email
+                </button>
 
                 <div class="text-center small">
-                    <a href="../HTML/login.html">Volver al Inicio de Sesión</a>
+                    <a href="../HTML/login.html">Volver al inicio de sesión</a>
                 </div>
+
             </form>
+
         </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="../JS/tpi.js"></script>
+    <script type="module">
+        import { API_USERS } from "../JS/Usuario.js";
+
+        document.getElementById("recoverForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById("email").value.trim().toLowerCase();
+
+            const res = await fetch(API_USERS);
+            const usuarios = await res.json();
+
+            const usuario = usuarios.find(u => u.email.toLowerCase() === email);
+
+            if (!usuario) {
+                alert("No existe una cuenta con ese correo.");
+                return;
+            }
+
+            localStorage.setItem("userRecoveryId", usuario.id);
+
+            alert("Te encontramos. Ahora podés crear tu nueva contraseña.");
+            window.location.href = "../HTML/restablecerClave.html";
+        });
+    </script>
+
 </body>
 </html>

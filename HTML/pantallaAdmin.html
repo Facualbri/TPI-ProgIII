@@ -6,177 +6,225 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Panel de Administración - Hotel tpi</title>
 
+    <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- CUSTOM CSS -->
     <link rel="stylesheet" href="../CSS/pantallaAdmin.css">
 
+    <!-- CHART.JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 
 <body>
+
+    <!-- =========================== -->
+    <!-- ENCABEZADO DEL ADMIN -->
+    <!-- =========================== -->
     <div class="admin-header">
         <div class="container d-flex justify-content-between align-items-center">
 
             <div>
-                <h2 class="mb-0"><i class="bi bi-gear-fill"></i> Panel de Administración</h2>
+                <h2 class="mb-0">
+                    <i class="bi bi-gear-fill"></i> Panel de Administración
+                </h2>
                 <p class="lead mb-0 ms-3">La Hoja Dorada</p>
             </div>
 
-            <a href="../HTML/pantallausuario.html" class="btn btn-danger shadow-sm">Cerrar Sesión</a>
+            <a href="../HTML/pantallausuario.html" class="btn btn-danger shadow-sm">
+                Cerrar Sesión
+            </a>
         </div>
     </div>
 
 
+    <!-- =========================== -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- =========================== -->
     <div class="container">
 
+        <!-- FORM AGREGAR HABITACIÓN -->
         <div class="form-section my-5">
-            <h3 class="mb-4 text-secondary"><i class="bi bi-house-door-fill"></i> Agregar Nueva Oferta de Habitación
+            <h3 class="mb-4">
+                <i class="bi bi-house-door-fill"></i> Agregar Nueva Habitación
             </h3>
 
-            <form id="addRoomForm" action="/api/add-room" method="POST" enctype="multipart/form-data">
+            <form id="addRoomForm">
+
+                <!-- NOMBRE -->
+                <div class="mb-3">
+                    <label for="roomName" class="form-label">Nombre de la Habitación</label>
+                    <input type="text" class="form-control" id="roomName" required
+                        placeholder="Ej: Suite Presidencial con Jacuzzi">
+                </div>
+
+                <!-- DESCRIPCIÓN -->
+                <div class="mb-3">
+                    <label for="roomDescription" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="roomDescription" rows="3" required
+                        placeholder="Describe la habitación, comodidades, etc."></textarea>
+                </div>
 
                 <div class="row">
+
+                    <!-- TIPO -->
                     <div class="col-md-6 mb-3">
-                        <label for="hotelName" class="form-label">Nombre del Hotel</label>
-                        <input type="text" class="form-control" id="hotelName" name="hotelName" required readonly
-                            placeholder="Nombre único cargado automáticamente" value="Hotel La Hoja Dorada" />
+                        <label for="roomType" class="form-label">Tipo de Habitación</label>
+                        <select class="form-select" id="roomType" required>
+                            <option value="" disabled selected>Seleccione un tipo</option>
+                            <option value="single">single</option>
+                            <option value="double">double</option>
+                            <option value="suite">suite</option>
+                            <option value="family">family</option>
+                            <option value="triple">triple</option>
+                        </select>
+
                     </div>
 
+                    <!-- PRECIO -->
                     <div class="col-md-6 mb-3">
-                        <label for="hotelLocation" class="form-label">Ubicación (Ciudad)</label>
-                        <input type="text" class="form-control" id="hotelLocation" name="hotelLocation" required
-                            placeholder="Ej: Cancún, México">
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="roomType" class="form-label">Tipo de Habitación</label>
-                            <select class="form-select" id="roomType" name="roomType" required>
-                                <option value="" disabled selected>Seleccione un tipo</option>
-                                <option value="single">Individual (Single)</option>
-                                <option value="double">Doble (Double)</option>
-                                <option value="suite">Suite de Lujo</option>
-                                <option value="family">Familiar</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-4 mb-3">
-                            <label for="roomPrice" class="form-label">Precio por Noche (USD)</label>
-                            <div class="input-group">
-                                <span class="input-group-text">$</span>
-                                <input type="number" class="form-control" id="roomPrice" name="roomPrice" required
-                                    min="10" placeholder="120">
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 mb-3">
-                            <label for="roomStock" class="form-label">Cupos / Stock</label>
-                            <input type="number" class="form-control" id="roomStock" name="roomStock" required min="1"
-                                placeholder="5">
+                        <label for="roomPrice" class="form-label">Precio por Noche (USD)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="roomPrice" min="10" required
+                                placeholder="120">
                         </div>
                     </div>
+                </div>
 
-                    <div class="mb-4">
-                        <label for="roomDescription" class="form-label">Descripción de la Oferta</label>
-                        <textarea class="form-control" id="roomDescription" name="roomDescription" rows="3"
-                            placeholder="Ej: Habitación con vista al mar, incluye desayuno continental."></textarea>
-                    </div>
+                <!-- IMAGEN -->
+                <div class="mb-4">
+                    <label for="roomImage" class="form-label">Imagen de la Habitación</label>
+                    <input type="file" class="form-control" id="roomImage" accept="image/*" required>
+                    <small class="form-text text-muted">Sube una imagen JPG o PNG.</small>
 
-                    <div class="mb-4">
-                        <label for="roomImages" class="form-label">Subir Fotos de la Habitación</label>
-                        <input type="file" class="form-control" id="roomImages" name="roomImages" accept="image/*"
-                            multiple>
-                        <small class="form-text text-muted">Puedes seleccionar múltiples imágenes (JPG, PNG).</small>
-                        <div id="imagePreviewContainer" class="image-preview-container">
-                            <span class="image-preview-placeholder">No hay imágenes seleccionadas</span>
-                        </div>
+                    <div id="imagePreviewContainer" class="image-preview-container mt-2">
+                        <span class="image-preview-placeholder">
+                            No hay imágenes seleccionadas
+                        </span>
                     </div>
+                </div>
 
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-plus-circle me-2"></i>
-                            Publicar Oferta</button>
-                    </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-plus-circle me-2"></i> Publicar Habitación
+                    </button>
+                </div>
 
             </form>
         </div>
 
-    </div>
 
-    <div class="row mb-5">
-        <div class="col-md-4">
-            <div class="card widget-card p-3 shadow-sm">
-                <h5 class="card-title text-primary">Hoteles Publicados</h5>
-                <p class="h1 text-center">45</p>
-                <p class="text-muted small">Hoteles activos en el sistema</p>
-                <a href="#" class="btn btn-sm btn-outline-primary">Ver Listado</a>
+        <!-- =========================== -->
+        <!-- WIDGETS -->
+        <!-- =========================== -->
+        <div class="row mb-5">
+
+            <!-- HABITACIONES -->
+            <div class="col-md-4">
+                <div class="card widget-card p-3 shadow-sm">
+                    <h5 class="card-title text-primary">Habitaciones</h5>
+                    <p class="h1 text-center">45</p>
+                    <p class="text-muted small">Habitaciones activas</p>
+
+                    <a href="../HTML/gestionarHabitacionAdmin.html" class="btn btn-sm btn-outline-primary">
+                        Ver Habitaciones
+                    </a>
+
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="card widget-card p-3 shadow-sm" style="border-left-color: #28a745;">
-                <h5 class="card-title text-success">Reservas Hoy</h5>
-                <p class="h1 text-center">12</p>
-                <p class="text-muted small">Nuevas reservas pendientes</p>
-                <a href="#" class="btn btn-sm btn-outline-success">Gestionar</a>
+            <!-- RESERVAS -->
+            <div class="col-md-4">
+                <div class="card widget-card p-3 shadow-sm" style="border-left-color: #28a745;">
+                    <h5 class="card-title text-success">Reservas Hoy</h5>
+                    <p class="h1 text-center">12</p>
+                    <p class="text-muted small">Nuevas reservas pendientes</p>
+
+                    <a href="../HTML/gestionarReservasAdmin.html" class="btn btn-sm btn-outline-success">
+                        Gestionar Reservas
+                    </a>
+
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="card widget-card p-3 shadow-sm" style="border-left-color: #ffc107;">
-                <h5 class="card-title text-warning">Usuarios Registrados</h5>
-                <p class="h1 text-center">890</p>
-                <p class="text-muted small">Total de usuarios en la plataforma</p>
-                <a href="#" class="btn btn-sm btn-outline-warning">Ver Usuarios</a>
+            <!-- USUARIOS -->
+            <div class="col-md-4">
+                <div class="card widget-card p-3 shadow-sm" style="border-left-color: #ffc107;">
+                    <h5 class="card-title text-warning">Usuarios Registrados</h5>
+                    <p class="h1 text-center">890</p>
+                    <p class="text-muted small">Total de usuarios</p>
+
+                    <a href="../HTML/gestionarUsuariosAdmin.html" class="btn btn-sm btn-outline-warning">
+                        Ver Usuarios
+                    </a>
+
+                </div>
             </div>
-        </div>
-    </div>
 
-    <hr>
 
-    <div class="form-section mb-5">
-        <h3 class="mb-4 text-secondary"><i class="bi bi-bar-chart-line-fill"></i> Historial de Reservas Mensuales</h3>
-        <div class="card p-3">
-            <canvas id="reservationsChart"></canvas>
-        </div>
-    </div>
+            <hr>
 
-    <hr>
+            <!-- =========================== -->
+            <!-- GRÁFICO -->
+            <!-- =========================== -->
+            <div class="form-section mb-5">
+                <h3 class="mb-4">
+                    <i class="bi bi-bar-chart-line-fill me-2"></i>
+                    Historial de Reservas Mensuales
+                </h3>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="../JS/tpi.js"></script> <script>
-        // Lógica de Previsualización y Gráficos (Mantenida localmente para el DOMContentLoaded)
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Lógica para el GRÁFICO DE RESERVAS (Chart.js) ---
-            const ctx = document.getElementById('reservationsChart');
-            
-            // Datos simulados para el gráfico (puedes cargarlos desde la API usando tpi.js si lo deseas)
-            const labels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-            const data = [150, 180, 220, 190, 250, 300, 350, 320, 280, 260, 290, 400]; // Números de reservas simuladas
+                <div class="card p-3">
+                    <canvas id="reservationsChart"></canvas>
+                </div>
+            </div>
 
-            if (ctx) {
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Total de Reservas',
-                            data: data,
-                            backgroundColor: 'rgba(54, 162, 235, 0.7)', 
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: { y: { beginAtZero: true } },
-                        plugins: { legend: { display: false } }
-                    }
-                });
-            }
-            
-            // La lógica de previsualización de imágenes ya está definida en tpi.js y se ejecuta globalmente.
-        });
-    </script>
+            <hr>
+
+        </div> <!-- FIN CONTAINER -->
+
+
+        <!-- =========================== -->
+        <!-- SCRIPTS -->
+        <!-- =========================== -->
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script type="module" src="../JS/tpi.js"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+
+                const ctx = document.getElementById('reservationsChart');
+
+                const labels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+                const data = [150, 180, 220, 190, 250, 300, 350, 320, 280, 260, 290, 400];
+
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Total de Reservas',
+                                data: data,
+                                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: { y: { beginAtZero: true } },
+                            plugins: { legend: { display: false } }
+                        }
+                    });
+                }
+            });
+        </script>
+
+         
+
 </body>
+
 </html>

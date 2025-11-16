@@ -1,173 +1,183 @@
 /* ========================================= */
-/* VARIABLES GLOBALES Y ESTILOS BASE */
+/* PALETA DE COLORES ARMADA PARA TU FONDO */
 /* ========================================= */
 :root {
-    --color-primary-admin: #4B0082;   /* Morado Oscuro para encabezados y marca */
-    --color-secondary-admin: #007bff; /* Azul para botones y acento principal */
-    --color-bg-light: #f4f7fa;        /* Fondo principal muy claro */
-    --color-text-dark: #333;
-    --color-success: #28a745;
-    --color-warning: #ffc107;
+    --color-admin-dark: #0b3d2e;     /* Verde bosque oscuro */
+    --color-admin-main: #1f6f4a;     /* Verde musgo */
+    --color-admin-gold: #d9b96a;     /* Dorado suave */
+    --color-admin-light: #f5f7f3;    /* Blanco con tinte cálido */
+    --color-text-dark: #222;
 }
 
+/* ========================================= */
+/* FONDO GENERAL (imagen + overlay elegante) */
+/* ========================================= */
 body {
-    background-color: var(--color-bg-light);
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+        url("https://images.unsplash.com/photo-1728032506284-d2d8c0de07b9?q=100&w=1920&fm=jpg&crop=entropy&cs=tinysrgb");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+
+    font-family: "Segoe UI", sans-serif;
     color: var(--color-text-dark);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* ========================================= */
-/* ENCABEZADO DEL ADMINISTRADOR */
+/* ENCABEZADO */
 /* ========================================= */
-
 .admin-header {
-    background-color: var(--color-primary-admin); /* Fondo morado dominante */
+    background: rgba(11, 61, 46, 0.85);  /* verde bosque semitransparente */
+    backdrop-filter: blur(4px);
     color: white;
-    padding: 20px 0;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    margin-bottom: 40px;
+    padding: 18px 0;
+    border-bottom: 2px solid var(--color-admin-gold);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
 }
 
 .admin-header h2 {
-    font-weight: 700;
-    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
 }
 
 .admin-header .lead {
-    color: #f7f7f7; /* Subtítulo más claro */
-    font-size: 1rem;
-    font-style: italic;
+    color: var(--color-admin-gold);
+    font-weight: 600;
+    margin-top: 3px;
 }
 
 .admin-header .btn-danger {
-    background-color: #dc3545;
+    background-color: #c0392b;
     border: none;
-    font-weight: 600;
-    border-radius: 8px;
-    transition: background-color 0.3s;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 8px 16px;
+}
+
+.admin-header .btn-danger:hover {
+    background-color: #922b21;
 }
 
 /* ========================================= */
-/* SECCIONES PRINCIPALES Y FORMS */
+/* FORMULARIO PRINCIPAL */
 /* ========================================= */
-
-.form-section h3 {
-    color: var(--color-primary-admin); /* Títulos de sección morados */
-    font-weight: 700;
-    margin-bottom: 30px !important;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 10px;
-}
-
 #addRoomForm {
-    background-color: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(4px);
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
 }
 
-/* Etiquetas de Formulario */
 .form-label {
     font-weight: 600;
-    color: var(--color-text-dark);
+    color: var(--color-admin-dark);
 }
 
-/* Estilos de Inputs */
-.form-control, .form-select {
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    padding: 10px 15px;
-}
-
-.form-control:focus, .form-select:focus {
-    border-color: var(--color-secondary-admin);
-    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
-}
-
-/* Input de Archivos (Imágenes) */
-#roomImages {
-    padding-top: 12px;
-}
-
-/* Contenedor de Previsualización de Imágenes */
-.image-preview-container {
-    border: 2px dashed #ccc;
+.form-control,
+.form-select {
     border-radius: 8px;
-    padding: 15px;
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100px;
-    background-color: #fafafa;
+    border: 1px solid #bbb;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-admin-main);
+    box-shadow: 0 0 0 0.2rem rgba(31, 111, 74, 0.35);
+}
+
+/* PREVIEW DE IMAGEN */
+.image-preview-container {
+    border: 2px dashed var(--color-admin-main);
+    background-color: #ffffffc7;
+    border-radius: 8px;
+    padding: 18px;
 }
 
 .image-preview-placeholder {
-    color: #999;
+    color: #666;
     font-style: italic;
 }
 
-/* Botón Publicar Oferta */
+/* BOTÓN PUBLICAR */
 #addRoomForm .btn-primary {
-    background-color: var(--color-secondary-admin);
+    background: linear-gradient(
+        90deg,
+        var(--color-admin-main),
+        #14573b
+    );
     border: none;
     font-weight: 700;
+    letter-spacing: .5px;
     padding: 12px;
-    border-radius: 8px;
-    transition: background-color 0.3s;
+    border-radius: 10px;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
 }
 
 #addRoomForm .btn-primary:hover {
-    background-color: #0056b3;
+    background: linear-gradient(
+        90deg,
+        #14573b,
+        var(--color-admin-main)
+    );
+    transform: translateY(-1px);
 }
 
 /* ========================================= */
-/* WIDGETS / TARJETAS DE INDICADORES */
+/* WIDGETS */
 /* ========================================= */
-
 .widget-card {
-    background-color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 20px !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease;
-    border-left: 5px solid var(--color-secondary-admin); /* Borde de acento */
-    margin-bottom: 20px;
+    background: rgba(255,255,255,0.93);
+    backdrop-filter: blur(3px);
+    border-radius: 14px;
+    padding: 22px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    border-left: 6px solid var(--color-admin-main);
+    transition: transform .25s, box-shadow .25s;
 }
 
 .widget-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
 }
 
 .widget-card h5 {
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 5px;
+    color: var(--color-admin-dark);
+    font-weight: 700;
 }
 
 .widget-card .h1 {
-    font-weight: 800;
-    margin: 10px 0;
-    font-size: 2.5rem;
+    color: var(--color-admin-main);
 }
 
-/* Ajuste de colores específicos */
-.widget-card[style*="#28a745"] { border-left-color: var(--color-success) !important; }
-.widget-card[style*="#ffc107"] { border-left-color: var(--color-warning) !important; }
+.widget-card .btn-outline-primary {
+    border-color: var(--color-admin-main);
+    color: var(--color-admin-main);
+    font-weight: 600;
+}
 
-/* Botones de acción en widgets */
-.widget-card .btn-outline-primary { color: var(--color-secondary-admin); border-color: var(--color-secondary-admin); }
-.widget-card .btn-outline-success { color: var(--color-success); border-color: var(--color-success); }
-.widget-card .btn-outline-warning { color: var(--color-warning); border-color: var(--color-warning); }
+.widget-card .btn-outline-success {
+    border-color: #28a745;
+}
+
+.widget-card .btn-outline-warning {
+    border-color: var(--color-admin-gold);
+    color: var(--color-admin-gold);
+}
 
 /* ========================================= */
 /* GRÁFICO */
 /* ========================================= */
-
 .form-section .card {
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    background: rgba(255,255,255,0.9);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.15);
+}
+
+h3 {
+    color: white;
 }

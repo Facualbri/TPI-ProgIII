@@ -1,69 +1,215 @@
-/* Estilos específicos para la página de comprobante.html */
+/* ===================================================== */
+/* ESTÉTICA SELVA PREMIUM – COMPROBANTE FINAL */
+/* ===================================================== */
 
-/* Asegura que el color de fondo sea el mismo que el de carrito/usuario si no se usa body en comprobante */
-.comprobante-card {
-    border-radius: 15px !important;
-    overflow: hidden; /* Para que el header redondee correctamente */
+:root {
+    --color-dark: #0b3d2e;
+    --color-main: #1f6f4a;
+    --color-gold: #d9b96a;
+    --color-light: #f5f7f3;
+    --color-bg-glass: rgba(255,255,255,0.10);
 }
 
+/* ===================== */
+/* FONDO GLOBAL */
+/* ===================== */
+
+body {
+    background: 
+        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+        url("https://images.unsplash.com/photo-1728032506284-d2d8c0de07b9?q=100&w=1920&fm=jpg&crop=entropy&cs=tinysrgb");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: "Segoe UI", sans-serif;
+    color: white !important;
+}
+
+/* ===================== */
+/* TARJETA PRINCIPAL */
+/* ===================== */
+
+.comprobante-card {
+    background: rgba(0, 0, 0, 0.55) !important;
+    backdrop-filter: blur(12px);
+    border-radius: 18px !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    padding: 0 !important;
+    color: white !important;
+}
+
+/* ===================== */
+/* HEADER */
+/* ===================== */
+
 .header-comprobante {
-    /* Fondo morado de la marca principal */
-    background-color: var(--color-primary-despegar) !important; 
-    border-bottom: 5px solid var(--color-action-sale); /* Línea de acento naranja */
+    background: rgba(11, 61, 46, 0.90) !important;
+    border-bottom: 4px solid var(--color-gold);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
 }
 
 .header-comprobante h1 {
-    font-weight: 700;
+    color: var(--color-gold) !important;
+    font-weight: 900;
 }
 
-/* Títulos de sección */
+.header-comprobante p {
+    color: #fff !important;
+}
+
+/* ===================== */
+/* TEXTO DE CONFIRMACIÓN */
+/* ===================== */
+
+.text-success.fw-bold {
+    color: var(--color-gold) !important;
+    text-shadow: 0 3px 6px rgba(0,0,0,0.7);
+}
+
+/* ===================== */
+/* TÍTULOS DE SECCIÓN */
+/* ===================== */
+
 .section-title {
-    color: var(--color-primary-despegar); /* Morado de marca */
-    font-weight: 600;
+    color: var(--color-gold) !important;
+    font-weight: 700 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.25);
     padding-bottom: 5px;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 1rem;
+    margin-bottom: 12px;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.6);
 }
 
-/* Imagen de la habitación en el comprobante */
+/* ===================== */
+/* DETALLES DE HABITACIÓN */
+/* ===================== */
+
+#roomDetailsContainer {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255,255,255,0.25);
+    backdrop-filter: blur(4px);
+
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;              /* para responsive elegante */
+    padding: 20px;
+    border-radius: 12px;
+}
+
 .room-img {
-    width: 120px;
-    height: 80px;
-    object-fit: cover;
-    border: 2px solid #ddd;
+    width: 180px !important;
+    height: 130px !important;
+    object-fit: cover !important;
+    border: 3px solid var(--color-gold);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
 
-/* Estilo para el resumen de pagos */
+#roomDetailsContainer div {
+    flex: 1;
+    min-width: 220px;
+    color: white !important;
+}
+
+#roomDetailsContainer h4 {
+    color: var(--color-gold) !important;
+    font-weight: 700;
+    text-shadow: 0 3px 6px rgba(0,0,0,0.8);
+}
+
+#roomDetailsContainer p {
+    color: #e6e6e6 !important;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* ===================== */
+/* RESUMEN DE PAGO */
+/* ===================== */
+
 .payment-summary .list-group-item {
-    border-color: #f0f0f0;
+    background: rgba(0,0,0,0.30) !important;
+    border-color: rgba(255,255,255,0.15);
+    color: white !important;
+    font-weight: 500;
 }
 
 .total-final-comprobante {
-    background-color: #f0f8ff !important; /* Fondo sutil para destacar el total */
-    border-top: 2px dashed #ccc;
-    font-size: 1.25rem !important;
+    background: rgba(0,0,0,0.55) !important;
+    border-top: 2px solid var(--color-gold) !important;
+    font-size: 1.4rem !important;
+    color: var(--color-gold) !important;
 }
 
-.total-final-comprobante .text-danger {
-    color: var(--color-action-sale) !important; /* Naranja/Rojo de acción para el total */
+.total-final-comprobante span {
+    color: var(--color-gold) !important;
 }
 
-/* Estilo para impresión */
+/* ===================== */
+/* ALERTA */
+/* ===================== */
+
+.alert-info {
+    background: rgba(255,255,255,0.12) !important;
+    border: 1px solid rgba(255,255,255,0.25) !important;
+    color: var(--color-light) !important;
+}
+
+/* ===================== */
+/* BOTONES */
+/* ===================== */
+
+.btn-primary {
+    background: var(--color-main) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.btn-primary:hover {
+    background: #14573b !important;
+}
+
+.btn-outline-secondary {
+    border-color: var(--color-gold) !important;
+    color: var(--color-gold) !important;
+    font-weight: 600 !important;
+}
+
+.btn-outline-secondary:hover {
+    background: var(--color-gold) !important;
+    color: black !important;
+}
+
+/* ===================== */
+/* PRINT */
+/* ===================== */
+
 @media print {
     body {
-        background-color: white !important;
-    }
-    .container {
-        width: 100%;
-        margin: 0;
-        padding: 0;
+        background: white !important;
     }
     .comprobante-card {
+        background: white !important;
+        color: black !important;
         box-shadow: none !important;
-        border: 1px solid #000;
     }
-    /* Ocultar elementos no deseados en la impresión */
-    .d-grid.gap-2, .alert-info {
+    .btn,
+    .alert-info {
         display: none !important;
     }
+}
+
+/* Mostrar el título y el precio juntos en una sola línea */
+.payment-summary .list-group-item {
+    display: flex !important;
+    justify-content: flex-start !important;
+    gap: 8px !important; /* espacio entre texto y precio */
+    align-items: center !important;
+}
+
+/* Que el span (el precio) no se vaya a la derecha */
+.payment-summary .list-group-item span {
+    margin-left: 6px;
+    font-weight: 700 !important;
 }

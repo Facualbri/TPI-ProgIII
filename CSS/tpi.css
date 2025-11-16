@@ -1,166 +1,176 @@
 /* ========================================= */
-/* VARIABLES GLOBALES Y ESTILOS BASE */
+/* PALETA DE COLORES COMPARTIDA */
 /* ========================================= */
 :root {
-    --color-primary-despegar: #4B0082;   /* Morado Oscuro de Marca */
-    --color-secondary-despegar: #5500aa; /* Morado medio */
-    --color-action-blue: #007bff;        /* Azul brillante para acción (Entrar) */
-    --color-text-dark: #333;
-    --color-light-bg: #f4f7fa;           /* Fondo muy claro y suave */
-    --card-width: 450px;
+    --color-admin-dark: #0b3d2e;
+    /* Verde bosque oscuro */
+    --color-admin-main: #1f6f4a;
+    /* Verde musgo */
+    --color-admin-gold: #d9b96a;
+    /* Dorado suave */
+    --color-admin-light: #f5f7f3;
+    /* Blanco cálido */
+    --color-text-light: #f8f8f8;
 }
 
 /* ========================================= */
-/* ESTILOS DEL CUERPO (BODY) - FONDO VISUAL */
+/* FONDO COMPLETO (MISMO QUE ADMIN) */
 /* ========================================= */
 body {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Fondo degradado suave con un toque de azul/morado para un look moderno */
-    background: linear-gradient(135deg, #eaf3fa 0%, #d8e0e8 100%);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente moderna y legible */
+
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.50)),
+        url("https://images.unsplash.com/photo-1728032506284-d2d8c0de07b9?q=100&w=1920&fm=jpg&crop=entropy&cs=tinysrgb");
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+
+    font-family: "Segoe UI", sans-serif;
     padding: 20px;
 }
 
 /* ========================================= */
-/* ESTILOS DE LA TARJETA (CARD) - EL CONTEINER */
+/* CARD PRINCIPAL (LOGIN / REGISTRO / RECUPERAR) */
 /* ========================================= */
-main.card { 
+main.card {
     width: 100%;
-    max-width: var(--card-width);
-    /* Borde súper redondeado, moderno y elegante */
-    border-radius: 18px; 
-    border: none; /* Quitamos el borde duro, usamos solo sombra */
-    /* Sombra más profunda y visual, estilo "flotante" */
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); 
-    background-color: white; 
-    overflow: hidden; /* Asegura que todo quede dentro de los bordes redondeados */
-    transition: transform 0.3s ease;
+    max-width: 430px;
+
+    background: rgba(255, 255, 255, 0.10);
+    /* Glass */
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+
+    color: var(--color-text-light);
+    padding: 5px;
+    transition: transform .3s ease;
 }
 
 main.card:hover {
-    transform: translateY(-3px); /* Efecto sutil de elevación */
+    transform: translateY(-4px);
 }
 
 /* ========================================= */
-/* ENCABEZADO Y CONTENIDO DE LA TARJETA */
+/* TÍTULO */
 /* ========================================= */
-
-/* Título "Ingresar" */
-.card-title { 
-    color: var(--color-primary-despegar);
-    font-weight: 800; /* Más peso para impacto */
-    margin-bottom: 30px !important;
-    font-size: 1.8rem;
-    position: relative;
-    padding-bottom: 5px;
+.card-title {
+    color: var(--color-admin-gold);
+    font-weight: 800;
+    font-size: 1.9rem;
+    text-align: center;
+    margin-bottom: 25px;
 }
 
-/* Línea decorativa debajo del título */
 .card-title::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
+    content: "";
+    display: block;
     width: 60px;
     height: 3px;
-    background-color: var(--color-action-blue);
-    border-radius: 5px;
+    margin: 8px auto 0;
+    background: var(--color-admin-gold);
+    border-radius: 4px;
 }
 
-/* Etiquetas de formulario */
+main.card .text-muted,
+main.card .small,
+main.card p,
+main.card .text-center {
+    color: #ffffff !important;
+}
+
+/* ========================================= */
+/* FORM LABELS */
+/* ========================================= */
 .form-label {
-    color: var(--color-text-dark);
-    font-weight: 600; /* Etiquetas más visibles */
-    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-admin-light);
 }
 
 /* ========================================= */
-/* INPUTS CON ICONOS */
+/* INPUTS */
 /* ========================================= */
-
 .input-group-text {
-    background-color: #f0f3f6; /* Fondo gris claro para el icono */
-    border-color: #e0e0e0;
-    border-right: none;
-    border-radius: 6px 0 0 6px;
-    color: var(--color-primary-despegar); /* Iconos morados */
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--color-admin-gold);
 }
 
 .form-control {
-    border: 1px solid #e0e0e0;
-    border-left: none;
-    border-radius: 0 6px 6px 0;
-    padding: 10px 15px;
-    transition: border-color 0.2s;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: white;
+    padding: 12px;
+}
+
+.form-control::placeholder {
+    color: #ddd;
 }
 
 .form-control:focus {
-    border-color: var(--color-secondary-despegar);
-    box-shadow: 0 0 0 0.1rem rgba(75, 0, 130, 0.4); /* Sombra de foco más limpia */
+    border-color: var(--color-admin-gold);
+    box-shadow: 0 0 0 0.15rem rgba(217, 185, 106, 0.45);
 }
 
-/* Botón "Mostrar/Ocultar Contraseña" */
+/* Botón ver/ocultar contraseña */
 #ocultarPassLogin {
-    border: 1px solid #e0e0e0;
-    border-left: none;
-    background-color: white;
-    color: var(--color-primary-despegar);
-    border-radius: 0 6px 6px 0;
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--color-admin-gold);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* ========================================= */
-/* BOTONES Y ENLACES */
+/* BOTÓN PRINCIPAL */
 /* ========================================= */
-
-/* Botón principal de "Entrar" */
-.d-grid .btn-primary { 
-    background: linear-gradient(90deg, #007bff, #0056b3); /* Degradado visualmente atractivo */
-    border: none !important;
+.btn-primary {
+    background: linear-gradient(90deg, var(--color-admin-main), #134f37);
+    border: none;
     font-weight: 700;
     padding: 12px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-    transition: all 0.2s ease;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
-.d-grid .btn-primary:hover {
-    background: linear-gradient(90deg, #0056b3, #004085);
-    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.5);
-    transform: translateY(-1px);
+.btn-primary:hover {
+    background: linear-gradient(90deg, #134f37, var(--color-admin-main));
+    transform: translateY(-2px);
 }
 
-/* Enlaces (Contraseña olvidada) */
+/* ========================================= */
+/* LINKS */
+/* ========================================= */
 .card-body a {
-    color: var(--color-primary-despegar);
-    font-size: 0.9rem;
-    transition: color 0.2s;
+    color: var(--color-admin-gold);
+    font-weight: 600;
 }
 
 .card-body a:hover {
-    color: var(--color-secondary-despegar);
-}
-
-/* Checkbox "Recordarme" */
-.form-check-input:checked {
-    background-color: var(--color-primary-despegar);
-    border-color: var(--color-primary-despegar);
+    color: #fff;
 }
 
 /* ========================================= */
-/* FOOTER DE LA TARJETA (Registro) */
+/* FOOTER */
 /* ========================================= */
 .card-footer {
-    background-color: var(--color-light-bg); /* Fondo muy claro */
-    border-top: 1px solid #e0e0e0;
-    border-bottom-left-radius: 18px;
-    border-bottom-right-radius: 18px;
+    background: rgba(255, 255, 255, 0.12);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--color-text-light);
 }
 
 .card-footer a {
     font-weight: 700;
-    color: var(--color-primary-despegar); 
+    color: var(--color-admin-gold);
+}
+
+.card-footer a:hover {
+    color: white;
 }

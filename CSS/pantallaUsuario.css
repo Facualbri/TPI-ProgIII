@@ -1,191 +1,217 @@
 /* ========================================= */
-/* VARIABLES GLOBALES Y ESTILOS BASE */
+/* PALETA DE COLORES (MATCH CON ADMIN) */
 /* ========================================= */
 :root {
-    --color-primary-despegar: #4B0082;   /* Morado Oscuro de Marca */
-    --color-secondary-despegar: #007bff; /* Azul brillante para acción/énfasis */
-    --color-action-sale: #FF6700;        /* Naranja/Rojo para ofertas */
-    --color-text-dark: #333;
-    --color-light-bg: #f4f7fa;           /* Fondo muy claro y suave */
-    --color-card-bg: white;
+    --color-admin-dark: #0b3d2e;     /* Verde bosque oscuro */
+    --color-admin-main: #1f6f4a;     /* Verde musgo */
+    --color-admin-gold: #d9b96a;     /* Dorado suave */
+    --color-admin-light: #f5f7f3;    /* Blanco cálido */
+    --color-text-light: #f7f7f7;
+    --color-text-dark: #222;
 }
 
+/* ========================================= */
+/* FONDO GENERAL (imagen + overlay oscuro) */
+/* ========================================= */
 body {
-    background-color: var(--color-light-bg);
-    color: var(--color-text-dark);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+        url("https://images.unsplash.com/photo-1728032506284-d2d8c0de07b9?q=100&w=1920&fm=jpg&crop=entropy&cs=tinysrgb");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+
+    font-family: "Segoe UI", sans-serif;
+    color: var(--color-text-light);
 }
 
-/* ========================================= */
-/* NAV BAR Y CABECERA (Estilo Despegar/Premium) */
-/* ========================================= */
 
+/* ========================================= */
+/* NAV BAR (mismo estilo que Admin) */
+/* ========================================= */
 .navbar {
-    background-color: white !important;
-    /* Línea sutil morada en la parte inferior */
-    border-bottom: 3px solid var(--color-primary-despegar); 
+    background: rgba(11, 61, 46, 0.85) !important;
+    border-bottom: 2px solid var(--color-admin-gold);
+    backdrop-filter: blur(5px);
     padding: 15px 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Sombra sutil */
+    box-shadow: 0 6px 25px rgba(0,0,0,0.4);
 }
 
 .navbar-brand {
-    color: var(--color-primary-despegar) !important;
+    color: var(--color-admin-gold) !important;
     font-weight: 800 !important;
-    font-size: 1.8rem;
+    font-size: 1.7rem;
+    letter-spacing: 0.5px;
 }
 
-/* Botón Cerrar Sesión (Estilo limpio) */
-#btnCerrarSesion {
-    background-color: #dc3545;
-    border-color: #dc3545;
+/* Botón Mis Reservas */
+.navbar .btn-outline-primary {
+    border-color: var(--color-admin-gold) !important;
+    color: var(--color-admin-gold) !important;
     font-weight: 600;
-    border-radius: 8px;
-    padding: 8px 15px;
-    transition: background-color 0.3s;
+}
+.navbar .btn-outline-primary:hover {
+    background: var(--color-admin-gold) !important;
+    color: black !important;
 }
 
-/* ========================================= */
-/* SECCIÓN DE FILTROS (Caja de Búsqueda Flotante) */
-/* ========================================= */
+/* Botón Cerrar Sesión */
+#btnCerrarSesion {
+    background: #b92929;
+    border: none;
+    color: white !important;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 8px 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+#btnCerrarSesion:hover {
+    background: #922525;
+}
 
+
+/* ========================================= */
+/* TARJETA DE FILTROS */
+/* ========================================= */
 .container .row.mb-5.p-4.bg-light.rounded.shadow-sm {
-    /* Fondo limpio y moderno */
-    background: white !important;
+    background: rgba(255,255,255,0.10) !important;
     border-radius: 15px !important;
     padding: 30px !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombra más fuerte */
-    border: 1px solid #e0e0e0;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.3);
 }
 
-/* Estilo para el encabezado del filtro */
 .container .row.mb-5 h4 {
-    color: var(--color-primary-despegar) !important;
-    font-weight: 700;
+    color: var(--color-admin-gold) !important;
+    font-weight: 800;
 }
 
-/* Estilo de los Labels */
 .container .row.mb-5 label {
-    color: var(--color-text-dark) !important;
+    color: white !important;
     font-weight: 600;
 }
 
-/* Inputs y Selects */
-#searchForm .form-control, 
+/* Inputs */
+#searchForm .form-control,
 #searchForm .form-select {
-    border-radius: 8px;
-    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.8);
+    border: 1px solid #bbb;
     padding: 10px 15px;
-    transition: border-color 0.3s;
 }
 
-/* Foco de Inputs */
-#searchForm .form-control:focus, 
+#searchForm .form-control:focus,
 #searchForm .form-select:focus {
-    border-color: var(--color-secondary-despegar);
-    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+    border-color: var(--color-admin-main);
+    box-shadow: 0 0 0 0.2rem rgba(31, 111, 74, 0.35);
 }
 
-/* Botón de Aplicar Filtros */
+/* Botón Aplicar */
 #searchForm .btn-primary {
-    background-color: var(--color-secondary-despegar);
+    background: linear-gradient(90deg, var(--color-admin-main), #14573b);
     border: none;
     font-weight: 700;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 10px 20px;
-    transition: background-color 0.3s;
 }
 
 #searchForm .btn-primary:hover {
-    background-color: #0056b3;
+    background: linear-gradient(90deg, #14573b, var(--color-admin-main));
+}
+
+/* Botón */
+.btn-filtrar {
+    background: linear-gradient(90deg, #1f6f4a, #14573b);
+    color: white;
+    font-weight: 700;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    transition: 0.25s ease;
+}
+
+.btn-filtrar:hover {
+    background: linear-gradient(90deg, #14573b, #1f6f4a);
+    transform: translateY(-2px);
 }
 
 /* ========================================= */
-/* TARJETAS DE OFERTA (offer-card) */
+/* TARJETAS DE HABITACIÓN */
 /* ========================================= */
-
 .offer-card {
-    background-color: var(--color-card-bg);
-    border: none; /* Quitamos el borde para un look más limpio */
-    border-radius: 15px; 
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Sombra suave y prominente */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    overflow: hidden; 
-    height: 100%;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.25);
+    backdrop-filter: blur(6px);
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+    overflow: hidden;
+    transition: 0.25s ease;
 }
 
 .offer-card:hover {
-    transform: translateY(-5px); 
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2); /* Sombra visual al pasar el ratón */
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.45);
 }
 
-/* Imagen superior de la tarjeta (Foco visual) */
+/* Imagen */
 .offer-card .card-img-top {
-    height: 200px; 
-    object-fit: cover; 
-    width: 100%;
-    /* Aseguramos que los bordes superiores coincidan con la tarjeta */
-    border-top-left-radius: 15px; 
-    border-top-right-radius: 15px;
+    height: 220px;
+    object-fit: cover;
 }
 
-.offer-card .card-body {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
+/* Título */
 .offer-card .card-title {
-    color: var(--color-text-dark); 
+    color: var(--color-admin-gold) !important;
     font-weight: 700;
-    font-size: 1.25rem; 
-    margin-bottom: 5px;
+    font-size: 1.3rem;
 }
 
-/* Subtítulo de ubicación */
+/* Ubicación */
 .offer-card .card-subtitle {
-    color: var(--color-primary-despegar); /* Morado para la marca/ubicación */
-    font-weight: 500;
-    font-size: 0.95rem;
-    margin-bottom: 10px;
+    color: var(--color-admin-light) !important;
+    opacity: 0.9;
+    font-weight: 600;
 }
 
 /* Descripción */
 .offer-card .card-text {
-    color: #6c757d;
+    color: #e4e4e4 !important;
     font-size: 0.95rem;
-    flex-grow: 1;
 }
 
-/* Lista de Detalles (Tipo, Disponibilidad) */
-.offer-card .list-unstyled {
-    margin-top: 15px;
-    padding-top: 10px;
-    border-top: 1px solid #f0f0f0; /* Separador sutil */
-    font-size: 0.9rem;
+/* Lista */
+.offer-card li {
+    color: #e8e8e8 !important;
 }
 
-/* Badge de Precio */
+/* PRECIO */
 .offer-card .badge {
-    background-color: var(--color-action-sale) !important; /* Naranja/Rojo llamativo para precios */
-    color: white !important;
-    font-size: 1.1rem !important;
+    background-color: var(--color-admin-gold) !important;
+    color: black !important;
     font-weight: 800;
-    padding: 8px 14px;
-    border-radius: 20px;
-    box-shadow: 0 2px 5px rgba(255, 103, 0, 0.4);
+    padding: 7px 14px;
+    border-radius: 18px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
 }
 
 /* Botón Reservar */
 .offer-card .btn-reservar {
-    background-color: var(--color-secondary-despegar); 
-    border-color: var(--color-secondary-despegar);
-    border-radius: 8px;
-    font-weight: 600;
+    background: linear-gradient(90deg, var(--color-admin-main), #14573b);
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
     padding: 8px 18px;
-    transition: background-color 0.3s;
 }
 
 .offer-card .btn-reservar:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+    background: linear-gradient(90deg, #14573b, var(--color-admin-main));
+}
+
+
+/* AJUSTES DE TEXTO */
+.offer-card small,
+.offer-card .small {
+    color: #ffffff !important;
 }

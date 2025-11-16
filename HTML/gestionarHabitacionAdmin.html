@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Gestión de Habitaciones - Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/pantallaAdmin.css">
+</head>
+
+<body>
+
+    <div class="admin-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-0"><i class="bi bi-door-open"></i> Gestión de Habitaciones</h2>
+                <p class="lead mb-0 ms-3">La Hoja Dorada</p>
+            </div>
+            <a href="../HTML/pantallaAdmin.html" class="btn btn-light">Volver</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h3 class="mb-4"><i class="bi bi-house-fill me-2"></i> Habitaciones Registradas</h3>
+
+        <div class="row" id="listaHabitaciones">
+            <!-- Se cargan vía JS -->
+        </div>
+    </div>
+
+    <script type="module" src="../JS/tpi.js"></script>
+
+
+</body>
+
+</html>

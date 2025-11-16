@@ -1,10 +1,152 @@
- /* Estilos específicos para la página de carrito */
- body {
-     background: linear-gradient(135deg, #f8fafc, #e6eef8);
-     min-height: 100vh;
- }
+/* ========================================= */
+/* FONDO SELVA + OSCURO IGUAL A TODO TU SISTEMA */
+/* ========================================= */
+body {
+    background:
+        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+        url("https://images.unsplash.com/photo-1728032506284-d2d8c0de07b9?q=100&w=1920&fm=jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 
- .summary-card {
-     border: 1px solid #dee2e6;
-     border-radius: 0.5rem;
- }
+    font-family: "Segoe UI", sans-serif;
+    color: white !important;
+    min-height: 100vh;
+    padding-top: 20px;
+}
+
+/* ========================================= */
+/* TITULO PRINCIPAL */
+/* ========================================= */
+h1 {
+    color: #d9b96a !important;  /* Dorado premium */
+    font-weight: 900;
+    text-shadow: 0 3px 10px rgba(0,0,0,0.8);
+}
+
+/* ========================================= */
+/* TARJETA PRINCIPAL */
+/* ========================================= */
+.card {
+    background: rgba(255,255,255,0.10) !important;  /* vidrio */
+    backdrop-filter: blur(10px);
+    border-radius: 16px !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5) !important;
+    color: white !important;
+}
+
+/* Header de tarjeta (Detalles del producto) */
+.card-header {
+    background: rgba(15, 106, 59, 0.9) !important;  /* verde premium */
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+    color: white !important;
+    font-weight: 700;
+}
+
+/* ========================================= */
+/* TEXTOS */
+/* ========================================= */
+.text-muted {
+    color: #e8e8e8 !important;
+}
+
+.text-danger {
+    color: #ffb3b3 !important;
+}
+
+.text-warning {
+    color: #ffd56b !important;
+}
+
+.text-success,
+#totalFinal {
+    color: #4EE397 !important;  /* verde claro premium */
+}
+
+/* ========================================= */
+/* INPUTS */
+/* ========================================= */
+.form-control {
+    background: rgba(255,255,255,0.12) !important;
+    border: 1px solid rgba(255,255,255,0.25) !important;
+    color: white !important;
+    border-radius: 10px;
+}
+
+.form-control:focus {
+    border-color: #d9b96a !important;
+    box-shadow: 0 0 0 0.15rem rgba(217,185,106,0.5) !important;
+}
+
+.form-control::placeholder {
+    color: #cccccc;
+}
+
+/* ========================================= */
+/* CARACTERÍSTICAS DE LISTA */
+/* ========================================= */
+.list-group-item {
+    background: rgba(0,0,0,0.35) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.list-group-item.fw-bold {
+    background: rgba(0,0,0,0.55) !important;
+}
+
+/* ========================================= */
+/* BOTONES */
+/* ========================================= */
+.btn-success {
+    background: #0f6a3b !important;
+    border: none !important;
+    font-weight: 700;
+    padding: 12px;
+    border-radius: 10px;
+    transition: 0.2s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.btn-success:hover {
+    background: #0b5731 !important;
+    transform: translateY(-2px);
+}
+
+.btn-outline-secondary {
+    border: 2px solid #d9b96a !important;
+    color: #d9b96a !important;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+.btn-outline-secondary:hover {
+    background: #d9b96a !important;
+    color: black !important;
+}
+
+/* ========================================= */
+/* ICONOS */
+/* ========================================= */
+.bi {
+    color: #d9b96a !important;
+}
+
+/* Se fuerza color blanco para partes interiores del texto */
+.card-title,
+.card-body h5,
+.card-body p,
+#reservaDetalles *,
+ul li span {
+    color: white !important;
+}
+
+
+/* TITULO PRINCIPAL EN DORADO PREMIUM */
+.container h1,
+h1.text-primary {
+    color: #d9b96a !important;     /* dorado */
+    font-weight: 900 !important;
+    text-shadow: 0 3px 10px rgba(0,0,0,0.8);
+}
