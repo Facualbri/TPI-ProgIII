@@ -4,7 +4,7 @@ import { Reservation, API_RESERVATIONS } from './Reserva.js';
 import { crearUsuario } from './Usuario.js';
 import { crearReserva } from './Reserva.js';
 import { roomsExtraData } from "./roomsExtraData.js";
-
+//TRAER DATOS DESDE MOCKAPI
 export async function obtenerUsuarios() {
   try {
     const res = await fetch(API_USERS);
@@ -34,22 +34,20 @@ export async function obtenerReservas() {
     console.error("Error al obtener reservas:", error);
   }
 }
-
+//PROTEGER PANTALLA USUARIO
 export function protegerPantallaUsuario() {
-    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+  const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
 
-    // Si es admin NO puede ver pantallaUsuario
-    if (usuario && usuario.role && usuario.role.toUpperCase() === "ADMIN") {
-        window.location.href = "../HTML/login.html";
-        return;
-    }
+  // Si es admin NO puede ver pantallaUsuario
+  if (usuario && usuario.role && usuario.role.toUpperCase() === "ADMIN") {
+    window.location.href = "../HTML/login.html";
+    return;
+  }
 
-    // SI NO HAY USUARIO → permitir ver la página como invitado
-    // (solo ocultamos botones desde otra función)
+  // SI NO HAY USUARIO → permitir ver la página como invitado
+  // (solo ocultamos botones desde otra función)
 }
-
-
-
+//LOGIN
 export async function loginUsuario(email, password) {
   try {
     // ✔ ADMIN HARDCODEADO
@@ -99,11 +97,10 @@ export async function loginUsuario(email, password) {
   } catch (error) {
     console.error("Error en login:", error);
     alert("Error al iniciar sesión.");
-  }
+  }
 }
 //conexion funcion loginUsuario con boton
 const botonLogin = document.getElementById("loginForm");
-
 if (botonLogin) {
   botonLogin.addEventListener("submit", async (e) => {
     e.preventDefault();//le decimos que no recargue la pagina, se encarga el js
@@ -119,10 +116,11 @@ if (botonLogin) {
     // Llamamos directamente a la función que ya hace todo
     await loginUsuario(email, password);
   });
-}
-//conexion formulario registro con funcion crearUsuario
-const registerForm = document.getElementById("registerForm");
 
+}
+
+//CONEXION FORMULARIO CON FUNCION crearUsuario(esta en Usuario.js)
+const registerForm = document.getElementById("registerForm");
 if (registerForm) {
   registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -144,46 +142,49 @@ if (registerForm) {
     window.location.href = "../HTML/login.html";
   });
 }
+
+//CERRAR SESION GENERAL
 export function cerrarSesion() {
-    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+  const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
 
-    // borrar siempre
-    localStorage.removeItem("usuarioActivo");
+  // borrar siempre
+  localStorage.removeItem("usuarioActivo");
 
-    // si era admin → login
-    if (usuario && usuario.role && usuario.role.toUpperCase() === "ADMIN") {
-        window.location.href = "../HTML/login.html";
-        return;
-    }
+  // si era admin → login
+  if (usuario && usuario.role && usuario.role.toUpperCase() === "ADMIN") {
+    window.location.href = "../HTML/login.html";
+    return;
+  }
 
-    // si era usuario común → pantallaUsuario como invitado
-    window.location.href = "../HTML/pantallausuario.html";
+  // si era usuario común → pantallaUsuario como invitado
+  window.location.href = "../HTML/pantallausuario.html";
 }
-
-
 
 // Función para mostrar/ocultar el botón "Cerrar Sesión"
 export function controlarBotonCerrarSesion() {
-    const btnCerrar = document.getElementById("btnCerrarSesion");
-    const btnLogin = document.getElementById("btnLoginUsuario");
+  const btnCerrar = document.getElementById("btnCerrarSesion");
+  const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
 
-    const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
+  if (!btnCerrar) return;
 
-    if (!btnCerrar) return;
+  //Si NO hay usuario NO mostrar botón
+  if (!usuario) {
+    btnCerrar.style.display = "none";
+    return;
+  }
 
-    if (usuario) {
-        btnCerrar.style.display = "block";
-        if (btnLogin) btnLogin.style.display = "none";
-    } else {
-        btnCerrar.style.display = "none";
-        if (btnLogin) btnLogin.style.display = "block";
-    }
+  //Si es admin → NO mostrar botón
+  if (usuario.role && usuario.role.toUpperCase() === "ADMIN") {
+    btnCerrar.style.display = "none";
+    return;
+  }
+
+  // ✔ Si es usuario normal → mostrar botón
+  btnCerrar.style.display = "block";
 }
-
 
 //conexion boton cerrar sesion con funcion cerrarSesion
 const btnCerrar = document.getElementById("btnCerrarSesion");
-// El código para la conexión del botón "Cerrar Sesión" debe mantenerse:
 if (btnCerrar) {
   btnCerrar.addEventListener("click", (e) => {
     e.preventDefault();
@@ -191,7 +192,7 @@ if (btnCerrar) {
   });
 }
 
-// ocular/mostrar contraseña en pantallaprincipal y registro
+// ocultar/mostrar contraseña en login y registro
 export function ocultarYMostrarPass(idInput, idBoton) {
   const input = document.getElementById(idInput);
   const boton = document.getElementById(idBoton);
@@ -218,70 +219,52 @@ ocultarYMostrarPass("passwordLogin", "ocultarPassLogin");
 
 // ESTE DOM CONTIENE FUNCION CERRAR SESION, MANEJO BOTON CERRAR SESION Y BOTONES RESERVAR
 document.addEventListener("DOMContentLoaded", () => {
-
-  // FUNCIÓN CERRAR SESIÓN
-  function cerrarSesion() {
-    localStorage.removeItem("usuarioActivo");
-    window.location.reload();
-  }
-  // MOSTRAR / OCULTAR BOTÓN CERRAR SESIÓN
-  function controlarBotonCerrarSesion() {
-    const btnCerrar = document.getElementById("btnCerrarSesion");
-    const usuarioActivo = localStorage.getItem("usuarioActivo");
-
-    if (!btnCerrar) return;
-
-    if (usuarioActivo) {
-      btnCerrar.style.display = "block";
-    } else {
-      btnCerrar.style.display = "none";
+  // MOSTRAR U OCULTAR BOTÓN CERRAR SESIÓN
+  // Solo si estamos en pantallausuario.html
+  if (window.location.pathname.includes("pantallausuario.html")) {
+    if (typeof controlarBotonCerrarSesion === "function") {
+      controlarBotonCerrarSesion();
     }
   }
 
-  // Se ejecuta al cargar la página
-  controlarBotonCerrarSesion();
-
-  // Conectar botón cerrar sesión
-  const btnCerrarSesion = document.getElementById("btnCerrarSesion");
-  if (btnCerrarSesion) {
-    btnCerrarSesion.addEventListener("click", (e) => {
-      e.preventDefault();
-      cerrarSesion();
-    });
-  }
   // MANEJAR BOTONES "RESERVAR"
+
   document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("btn-reservar")) {
-      e.preventDefault();
 
-      const usuarioActivo = localStorage.getItem("usuarioActivo");
+    // Captura el botón real aunque hagas click en el icono o texto
+    const boton = e.target.closest(".btn-reservar");
+    if (!boton) return;
 
-      // ✔ Si NO hay sesión → login
-      if (!usuarioActivo) {
-        window.location.href = "../HTML/login.html";
-        return;
-      }
+    e.preventDefault();
 
-      // ✔ Si hay sesión → guardar datos habitación
-      const roomData = e.target.getAttribute("data-room-details");
+    const usuarioActivo = JSON.parse(localStorage.getItem("usuarioActivo"));
 
-      if (!roomData) {
-        alert("Error: No se encontraron los detalles de la habitación.");
-        return;
-      }
-
-      localStorage.setItem("reservaTemporal", roomData);
-
-      // Ir al carrito
-      window.location.href = "../HTML/carrito.html";
+    // Si NO hay sesión → ir al login
+    if (!usuarioActivo) {
+      window.location.href = "../HTML/login.html";
+      return;
     }
+
+    // Hay sesión → obtener data-room-details
+    const roomData = boton.getAttribute("data-room-details");
+
+    if (!roomData) {
+      alert("Error: No se encontraron los detalles de la habitación.");
+      return;
+    }
+
+    // Guardamos datos de la reserva temporal
+    localStorage.setItem("reservaTemporal", roomData);
+
+    // Ir al carrito
+    window.location.href = "../HTML/carrito.html";
   });
 
-  // ======================================================
-  // 4️⃣ INICIALIZAR CARRITO (solo si estamos en carrito.html)
-  // ======================================================
+  // ======================================
+  // INICIALIZAR CARRITO (solo si aplica)
+  // ======================================
   const detallesContainer = document.getElementById("reservaDetalles");
-  if (detallesContainer) {
+  if (detallesContainer && typeof inicializarCarrito === "function") {
     inicializarCarrito();
   }
 
@@ -402,11 +385,11 @@ export async function confirmarReserva() {
   }
 
   // Marcar habitación como reservada en MockAPI
-await fetch(`${API_ROOMS}/${reserva.id}`, {
+  await fetch(`${API_ROOMS}/${reserva.id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ disponible: false })
-});
+  });
 
   // NO BORRAR AÚN LOS DATOS
   window.location.href = "../HTML/comprobante.html";
@@ -503,7 +486,7 @@ export async function cargarHabitaciones() {
 
   container.innerHTML = "<p>Cargando habitaciones...</p>";
 
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
   try {
     const res = await fetch(API_ROOMS);
@@ -528,28 +511,34 @@ export async function cargarHabitaciones() {
         ? `<span class="text-success fw-bold">Disponible</span>`
         : `<span class="text-danger fw-bold">Reservada</span>`;
 
+      
       const boton =
         room.disponible
-          ? `<a href="#" class="btn btn-sm btn-primary btn-reservar"
-               data-room-details='${JSON.stringify({
-                 id: room.id,
-                 nombre: extra.nombre,
-                 ubicacion: extra.ubicacion,
-                 precio: room.precio,
-                 imagen: extra.imagen,
-                 tipo: room.tipo
-               })}'>
-               Reservar
-             </a>`
+          ? `
+            <button 
+              class="btn btn-sm btn-primary btn-reservar"
+              data-room-details='${JSON.stringify({
+                id: room.id,
+                nombre: extra.nombre,
+                ubicacion: extra.ubicacion,
+                precio: room.precio,
+                imagen: extra.imagen,
+                tipo: room.tipo
+              })}'
+            >
+              Reservar
+            </button>
+          `
           : `<button class="btn btn-sm btn-secondary" disabled>Ocupada</button>`;
 
       const card = `
         <div class="col-md-6 col-lg-4 mb-4">
           <div class="card offer-card shadow-sm h-100">
+
             <img src="${extra.imagen}" class="card-img-top">
 
             <div class="card-body d-flex flex-column">
-              
+
               <h5 class="card-title text-success">${extra.nombre}</h5>
               <h6 class="card-subtitle mb-2 text-muted">
                 <i class="bi bi-geo-alt-fill"></i> ${extra.ubicacion}
@@ -581,6 +570,7 @@ export async function cargarHabitaciones() {
   }
 }
 
+//CONEXION CARGAR HABITACIONES AL INICIAR PANTALLA USUARIo
 document.addEventListener("DOMContentLoaded", () => {
 
   const container = document.getElementById("roomContainer");
@@ -592,39 +582,39 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 export async function mostrarReservasUsuario() {
-    const usuarioActivo = JSON.parse(localStorage.getItem("usuarioActivo"));
-    const container = document.getElementById("reservasContainer");
-    const sinMsg = document.getElementById("sinReservasMsg");
+  const usuarioActivo = JSON.parse(localStorage.getItem("usuarioActivo"));
+  const container = document.getElementById("reservasContainer");
+  const sinMsg = document.getElementById("sinReservasMsg");
 
-    if (!usuarioActivo || !container) return;
+  if (!usuarioActivo || !container) return;
 
-    try {
-        // 1. Obtener TODAS las reservas
-        const res = await fetch(API_RESERVATIONS);
-        const reservas = await res.json();
+  try {
+    // 1. Obtener TODAS las reservas
+    const res = await fetch(API_RESERVATIONS);
+    const reservas = await res.json();
 
-        // 2. Filtrar las del usuario activo
-        const misReservas = reservas.filter(r => r.userId == usuarioActivo.id);
+    // 2. Filtrar las del usuario activo
+    const misReservas = reservas.filter(r => r.userId == usuarioActivo.id);
 
-        // 3. Si no tiene reservas → mostrar mensaje
-        if (misReservas.length === 0) {
-            sinMsg.classList.remove("d-none");
-            return;
-        }
+    // 3. Si no tiene reservas → mostrar mensaje
+    if (misReservas.length === 0) {
+      sinMsg.classList.remove("d-none");
+      return;
+    }
 
-        // 4. Obtener habitaciones para poder mostrar datos
-        const roomsRes = await fetch(API_ROOMS);
-        const rooms = await roomsRes.json();
+    // 4. Obtener habitaciones para poder mostrar datos
+    const roomsRes = await fetch(API_ROOMS);
+    const rooms = await roomsRes.json();
 
-        container.innerHTML = "";
+    container.innerHTML = "";
 
-        // 5. Renderizar cada reserva
-        misReservas.forEach(reserva => {
+    // 5. Renderizar cada reserva
+    misReservas.forEach(reserva => {
 
-            const room = rooms.find(r => r.id == reserva.roomId);
-            if (!room) return;
+      const room = rooms.find(r => r.id == reserva.roomId);
+      if (!room) return;
 
-            container.innerHTML += `
+      container.innerHTML += `
                 <div class="col-md-6">
                     <div class="card shadow-sm">
 
@@ -641,143 +631,398 @@ export async function mostrarReservasUsuario() {
                             </p>
 
                             ${reserva.estado !== "CANCELADA"
-                                ? `<button class="btn btn-danger btn-cancelar" data-id="${reserva.id}" data-room="${room.id}">
+          ? `<button class="btn btn-danger btn-cancelar" data-id="${reserva.id}" data-room="${room.id}">
                                         Cancelar Reserva
                                    </button>`
-                                : `<button class="btn btn-secondary" disabled>Cancelada</button>`
-                            }
+          : `<button class="btn btn-secondary" disabled>Cancelada</button>`
+        }
 
                         </div>
 
                     </div>
                 </div>
             `;
-        });
+    });
 
-    } catch (error) {
-        console.error("Error cargando reservas:", error);
-    }
+  } catch (error) {
+    console.error("Error cargando reservas:", error);
+  }
 }
 
 export async function cancelarReserva(idReserva, idRoom) {
-    try {
-        // 1. Marcar reserva como cancelada
-        await fetch(`${API_RESERVATIONS}/${idReserva}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ estado: "CANCELADA" })
-        });
+  try {
+    // 1. Marcar reserva como cancelada
+    await fetch(`${API_RESERVATIONS}/${idReserva}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ estado: "CANCELADA" })
+    });
 
-        // 2. Liberar la habitación
-        await fetch(`${API_ROOMS}/${idRoom}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ disponible: true })
-        });
+    // 2. Liberar la habitación
+    await fetch(`${API_ROOMS}/${idRoom}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ disponible: true })
+    });
 
-        alert("Reserva cancelada correctamente.");
-        location.reload();
+    alert("Reserva cancelada correctamente.");
+    location.reload();
 
-    } catch (error) {
-        alert("Error al cancelar la reserva.");
-        console.error(error);
-    }
+  } catch (error) {
+    alert("Error al cancelar la reserva.");
+    console.error(error);
+  }
 }
 //CONEXION BOTONES CANCELAR RESERVA
 document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("btn-cancelar")) {
-        const idReserva = e.target.getAttribute("data-id");
-        const idRoom = e.target.getAttribute("data-room");
+  if (e.target.classList.contains("btn-cancelar")) {
+    const idReserva = e.target.getAttribute("data-id");
+    const idRoom = e.target.getAttribute("data-room");
 
-        cancelarReserva(idReserva, idRoom);
-    }
+    cancelarReserva(idReserva, idRoom);
+  }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const reservasContainer = document.getElementById("reservasContainer");
-    if (reservasContainer) {
-        mostrarReservasUsuario();
-    }
+  const reservasContainer = document.getElementById("reservasContainer");
+  if (reservasContainer) {
+    mostrarReservasUsuario();
+  }
 });
 
-export function configurarFormularioAdmin() {
-    const form = document.getElementById("addRoomForm");
-    if (!form) return;
+// FUNCION DE ADMIN
+export async function publicarHabitacion(event) {
+  event.preventDefault();
 
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault();
+  const form = document.getElementById("addRoomForm");
+  if (!form) return;
 
-        const nombre = document.getElementById("roomName").value;
-        const descripcion = document.getElementById("roomDescription").value;
-        const tipo = document.getElementById("roomType").value;
-        const precio = Number(document.getElementById("roomPrice").value);
+  const nombre = document.getElementById("roomName").value;
+  const descripcion = document.getElementById("roomDescription").value;
+  const tipo = document.getElementById("roomType").value;
+  const precio = Number(document.getElementById("roomPrice").value);
 
-        const imagenFile = document.getElementById("roomImage").files[0];
+  const imagenFile = document.getElementById("roomImage").files[0];
 
-        if (!imagenFile) {
-            alert("Subí una imagen.");
-            return;
-        }
+  if (!imagenFile) {
+    alert("Subí una imagen.");
+    return;
+  }
 
-        // Convertir imagen a Base64
-        const imagenBase64 = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.readAsDataURL(imagenFile);
-        });
+  // ⛔ NADA DE BASE64
+  // ✔ URL temporal súper liviana
+  const imagenUrl = URL.createObjectURL(imagenFile);
 
-        // Obtener habitaciones existentes
-        const res = await fetch(API_ROOMS);
-        const rooms = await res.json();
+  // Obtener habitaciones existentes desde MockAPI
+  const res = await fetch(API_ROOMS);
+  const rooms = await res.json();
+  const newId = String(rooms.length + 1);
 
-        const newId = String(rooms.length + 1);
+  // Guardar en MockAPI
+  await fetch(API_ROOMS, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: newId,
+      tipo,
+      precio,
+      disponible: true
+    })
+  });
 
-        // Enviar a API (info principal)
-        const nuevaHabitacion = {
-            id: newId,
-            tipo,
-            precio,
-            disponible: true
-        };
+  // Guardar extras en localStorage
+  const extrasLocal = JSON.parse(localStorage.getItem("roomsExtraData")) || {};
 
-        await fetch(API_ROOMS, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(nuevaHabitacion)
-        });
+  extrasLocal[newId] = {
+    nombre,
+    descripcion,
+    ubicacion: "Misiones",
+    imagen: imagenUrl
+  };
 
-        // ===============================
-        // 🔥 GUARDAR EXTRA DATA CORRECTO
-        // ===============================
-        const extrasLocal = JSON.parse(localStorage.getItem("roomsExtraData")) || {};
+  localStorage.setItem("roomsExtraData", JSON.stringify(extrasLocal));
 
-        extrasLocal[newId] = {
-            nombre,
-            descripcion,
-            ubicacion: "Misiones",
-            imagen: imagenBase64
-        };
+  alert("Habitación agregada con éxito.");
 
-        localStorage.setItem("roomsExtraData", JSON.stringify(extrasLocal));
+  form.reset();
 
-        // Señal para refrescar en pantallausuario
-        localStorage.setItem("refreshRooms", "true");
+  localStorage.setItem("refreshRooms", "true");
 
-        alert("Habitación agregada con éxito.");
-
-        form.reset();
-
-        // ===============================
-        // 🔥 AGREGAR CARD EN TIEMPO REAL
-        // ===============================
-        if (typeof cargarHabitaciones === "function") {
-            cargarHabitaciones();
-        }
-    });
+  // Refrescar si existe la función
+  if (typeof cargarHabitaciones === "function") {
+    cargarHabitaciones();
+  }
 }
 
-configurarFormularioAdmin();
 
-//DE ACA PARA ABAJO AGREGO NUEVO 
+//CONEXION FORMULARIO PUBLICAR HABITACION
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("addRoomForm");
+
+  console.log("¿Se encontró el formulario?", form);
+
+  if (form) {
+    console.log("✔ Listener conectado al form");
+    form.addEventListener("submit", publicarHabitacion);
+  } else {
+    console.log("❌ NO se encontró el formulario addRoomForm");
+  }
+});
+
+
+//REVISA SI EXISTEN CONTENEDORES PARA NO ROMPER NADA
+document.addEventListener("DOMContentLoaded", () => {
+  cargarHabitacionesAdmin();
+});
+
+export async function cargarHabitacionesAdmin() {
+  const container = document.getElementById("listaHabitaciones");
+  if (!container) return;
+
+  container.innerHTML = "<p>Cargando habitaciones...</p>";
+
+  try {
+    const res = await fetch(API_ROOMS);
+    const rooms = await res.json();
+
+    // Mezclar extras
+    const extrasLocal = JSON.parse(localStorage.getItem("roomsExtraData")) || {};
+    const extras = { ...roomsExtraData, ...extrasLocal };
+
+    container.innerHTML = "";
+
+    rooms.forEach(room => {
+      const extra = extras[room.id];
+      if (!extra) return;
+
+      const card = `
+    <div class="col-md-6 col-lg-4 mb-4">
+    <div class="card offer-card shadow-sm h-100">
+
+        <img src="${extra.imagen}" class="card-img-top">
+
+        <div class="card-body d-flex flex-column">
+          
+            <h5 class="card-title text-success">${extra.nombre}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+                <i class="bi bi-geo-alt-fill"></i> ${extra.ubicacion}
+            </h6>
+
+            <p class="card-text flex-grow-1">${extra.descripcion}</p>
+
+            <ul class="list-unstyled small mb-3">
+                <li><strong>Tipo:</strong> ${room.tipo}</li>
+                <li><strong>Disponibilidad:</strong> 
+                    ${room.disponible
+          ? '<span class="text-success fw-bold">Disponible</span>'
+          : '<span class="text-danger fw-bold">Reservada</span>'
+        }
+                </li>
+            </ul>
+
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+
+                <span class="badge bg-success fs-6">
+                    $${room.precio} / noche
+                </span>
+
+                <div class="d-flex gap-2">
+
+                    <button class="btn btn-warning btn-sm btn-edit-room"
+                            data-id="${room.id}">
+                        <span data-id="${room.id}">
+                            <i class="bi bi-pencil-square" data-id="${room.id}"></i>
+                        </span>
+                    </button>
+
+                    <!-- BOTÓN ELIMINAR (mismo fix aplicado) -->
+                    <button class="btn btn-danger btn-sm btn-delete-room"
+                            data-id="${room.id}">
+                        <span data-id="${room.id}">
+                            <i class="bi bi-trash3" data-id="${room.id}"></i>
+                        </span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+`;
+
+
+      container.innerHTML += card;
+    });
+
+  } catch (err) {
+    console.error("Error cargando habitaciones admin:", err);
+    container.innerHTML = "<p>Error al cargar habitaciones.</p>";
+  }
+}
+
+//EDITAR HABITACION
+export async function editarHabitacion(id) {
+
+  // 1. Traer datos desde la API
+  const res = await fetch(`${API_ROOMS}/${id}`);
+  const room = await res.json();
+
+  // 2. Traer extras desde localStorage / diccionario
+  const extrasLocal = JSON.parse(localStorage.getItem("roomsExtraData")) || {};
+  const extras = { ...roomsExtraData, ...extrasLocal };
+  const extra = extras[id];
+
+  // 3. Completar modal
+  document.getElementById("editId").value = id;
+  document.getElementById("editNombre").value = extra.nombre;
+  document.getElementById("editDescripcion").value = extra.descripcion;
+  document.getElementById("editUbicacion").value = extra.ubicacion;
+  document.getElementById("editTipo").value = room.tipo;
+  document.getElementById("editPrecio").value = room.precio;
+  document.getElementById("editImagenUrl").value = extra.imagen;
+
+  // 4. Mostrar modal
+  const modal = new bootstrap.Modal(document.getElementById("modalEditarHabitacion"));
+  modal.show();
+}
+
+//GUARDAR CAMBIOS HABITACION EDITADA
+export async function guardarCambiosHabitacion() {
+  const id = document.getElementById("editId").value;
+
+  // Valores de la API
+  const tipo = document.getElementById("editTipo").value;
+  const precio = Number(document.getElementById("editPrecio").value);
+
+  // Valores del extra data
+  const nombre = document.getElementById("editNombre").value;
+  const descripcion = document.getElementById("editDescripcion").value;
+  const ubicacion = document.getElementById("editUbicacion").value;
+
+  const imagenUrlInput = document.getElementById("editImagenUrl").value;
+  const imagenFile = document.getElementById("editImagenFile").files[0];
+
+  // Paso 1 → Traer extras actuales
+  const extrasLocal = JSON.parse(localStorage.getItem("roomsExtraData")) || {};
+  const extraActual = extrasLocal[id];
+
+  let imagenFinal = extraActual?.imagen || ""; // por defecto mantiene la actual
+
+  // Si hay file → generar URL
+  if (imagenFile) {
+    imagenFinal = URL.createObjectURL(imagenFile);
+  }
+  else if (imagenUrlInput.trim() !== "") {
+    imagenFinal = imagenUrlInput; // si el user puso una URL manual
+  }
+
+  // Paso 2 → Actualizar la API
+  await fetch(`${API_ROOMS}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id,
+      tipo,
+      precio,
+      disponible: true
+    })
+  });
+
+  // Paso 3 → Guardar extra data editado
+  extrasLocal[id] = {
+    nombre,
+    descripcion,
+    ubicacion,
+    imagen: imagenFinal
+  };
+
+  localStorage.setItem("roomsExtraData", JSON.stringify(extrasLocal));
+
+  // Aviso a pantallaUsuario
+  localStorage.setItem("refreshRooms", "true");
+
+  alert("Habitación actualizada con éxito.");
+
+  // Refrescar lista admin
+  if (typeof cargarHabitacionesAdmin === "function") {
+    cargarHabitacionesAdmin();
+  }
+
+  // Cerrar el modal
+  bootstrap.Modal.getInstance(document.getElementById("modalEditarHabitacion")).hide();
+}
+
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".btn-edit-room");
+    if (!btn) return;
+
+    editarHabitacion(btn.dataset.id);
+});
+
+//CONEXION BOTON GUARDAR CAMBIOS
+const btnGuardar = document.getElementById("btnGuardarCambios");
+if (btnGuardar) {
+  btnGuardar.addEventListener("click", guardarCambiosHabitacion);
+}
+//ELIMINAR HABITACION
+export async function eliminarHabitacion(id) {
+
+  // Confirmación
+  const ok = confirm("¿Seguro que querés eliminar esta habitación? Esta acción no se puede deshacer.");
+  if (!ok) return;
+
+  try {
+
+    // ===============================
+    // 1. ELIMINAR DE MOCKAPI
+    // ===============================
+    await fetch(`${API_ROOMS}/${id}`, {
+      method: "DELETE"
+    });
+
+    // ===============================
+    // 2. ELIMINAR DE LOCALSTORAGE
+    // ===============================
+
+    const extrasLocal = JSON.parse(localStorage.getItem("roomsExtraData")) || {};
+
+    delete extrasLocal[id];
+
+    localStorage.setItem("roomsExtraData", JSON.stringify(extrasLocal));
+
+    // ===============================
+    // 3. NOTIFICAR A PANTALLAUSUARIO
+    // ===============================
+    localStorage.setItem("refreshRooms", "true");
+
+    // ===============================
+    // 4. ALERTA
+    // ===============================
+    alert("Habitación eliminada con éxito.");
+
+    // ===============================
+    // 5. RECARGAR LISTA ADMIN
+    // ===============================
+    if (typeof cargarHabitacionesAdmin === "function") {
+      cargarHabitacionesAdmin();
+    }
+
+  } catch (err) {
+    console.error("Error al eliminar habitación:", err);
+    alert("Ocurrió un error al eliminar la habitación.");
+  }
+}
+// CONEXIÓN BOTÓN ELIMINAR HABITACIÓN
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".btn-delete-room");
+    if (!btn) return;
+
+    eliminarHabitacion(btn.dataset.id);
+});
+
+
+
 
 
