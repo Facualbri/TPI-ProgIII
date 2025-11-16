@@ -55,7 +55,7 @@ export async function loginUsuario(email, password) {
       if (usuario.role === "ADMIN") {
         window.location.href = "../HTML/pantallaAdmin.html";
       } else {
-        window.location.href = "../HTML/pantallaUsuario.html";
+        window.location.href = "../HTML/pantallausuario.html";
       }
 
       return usuario;
@@ -107,7 +107,7 @@ if (registerForm) {
     alert("✅ Usuario creado correctamente. Ahora podés iniciar sesión.");
 
     // Redirigir al login
-    window.location.href = "/HTML/login.html";
+    window.location.href = "../HTML/login.html";
   });
 }
 export function cerrarSesion() {
@@ -115,7 +115,7 @@ export function cerrarSesion() {
   localStorage.removeItem("usuarioActivo");
 
   // redirigir a pantallaPrincipal
-  window.location.href = "/HTML/pantallausuario.html";
+  window.location.href = "../HTML/pantallausuario.html";
 }
 
 // Función para mostrar/ocultar el botón "Cerrar Sesión"
@@ -210,7 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // ✔ Si NO hay sesión → login
       if (!usuarioActivo) {
-        window.location.href = "/HTML/login.html";
+        window.location.href = "../HTML/login.html";
         return;
       }
 
@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("reservaTemporal", roomData);
 
       // Ir al carrito
-      window.location.href = "/HTML/carrito.html";
+      window.location.href = "../HTML/carrito.html";
     }
   });
 
@@ -361,7 +361,7 @@ await fetch(`${API_ROOMS}/${reserva.id}`, {
 });
 
   // NO BORRAR AÚN LOS DATOS
-  window.location.href = "/HTML/comprobante.html";
+  window.location.href = "../HTML/comprobante.html";
 }
 
 //ENLAZAR BOTON CONFIRMAR RESERVA
@@ -485,14 +485,14 @@ export async function cargarHabitaciones() {
                  nombre: extra.nombre,
                  ubicacion: extra.ubicacion,
                  precio: room.precio,
-                 imagen: extra.imagen,
+                 imagen: roomsExtraData[room.id].imagen,
                  tipo: room.tipo
                })}'>
                Reservar
              </a>`
           : `<button class="btn btn-sm btn-secondary" disabled>Ocupada</button>`;
-
       // CARD HTML FINAL
+   
       const card = `
         <div class="col-md-6 col-lg-4 mb-4">
           <div class="card offer-card shadow-sm h-100">
