@@ -217,8 +217,14 @@ export function ocultarYMostrarPass(idInput, idBoton) {
 ocultarYMostrarPass("passwordRegister", "ocultarPassRegister");
 ocultarYMostrarPass("passwordLogin", "ocultarPassLogin");
 
-// ESTE DOM CONTIENE FUNCION CERRAR SESION, MANEJO BOTON CERRAR SESION Y BOTONES RESERVAR
+// ESTE DOM CONTIENE FUNCION CERRAR SESION, MANEJO BOTON CERRAR SESION Y BOTONES RESERVAR (DOM DE MANEJO GENERAL)
 document.addEventListener("DOMContentLoaded", () => {
+  //CONEXION BOTON FILTRAR
+    const searchForm = document.getElementById("searchForm");
+    if (searchForm) {
+        searchForm.addEventListener("submit", filtrarHabitaciones);
+    }
+  
   // MOSTRAR U OCULTAR BOTÓN CERRAR SESIÓN
   // Solo si estamos en pantallausuario.html
   if (window.location.pathname.includes("pantallausuario.html")) {
@@ -754,7 +760,6 @@ export async function publicarHabitacion(event) {
   }
 }
 
-
 //CONEXION FORMULARIO PUBLICAR HABITACION
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("addRoomForm");
@@ -768,7 +773,6 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("❌ NO se encontró el formulario addRoomForm");
   }
 });
-
 
 //REVISA SI EXISTEN CONTENEDORES PARA NO ROMPER NADA
 document.addEventListener("DOMContentLoaded", () => {
@@ -1021,6 +1025,207 @@ document.addEventListener("click", (e) => {
 
     eliminarHabitacion(btn.dataset.id);
 });
+
+//BUSQUEDA DE HABITACIONES EN PANTALLA USUARIO
+export async function filtrarHabitaciones(event) {
+  event.preventDefault();
+
+  const tipoSeleccionado = document.getElementById("selectTipo").value;
+  const precioMax = Number(document.getElementById("inputPrecio").value);
+
+  // traer habitaciones
+  const res = await fetch(API_ROOMS);
+  const rooms = await res.json();
+
+  const extras = {
+    ...roomsExtraData,
+    ...(JSON.parse(localStorage.getItem("roomsExtraData")) || {})
+  };
+
+  // FILTRO
+  const filtradas = rooms.filter(room => {
+
+    const extra = extras[room.id];
+    if (!extra) return false;
+
+    const coincideTipo = tipoSeleccionado === "todos" || room.tipo === tipoSeleccionado;
+    const coincidePrecio = !precioMax || room.precio <= precioMax;
+
+    return coincideTipo && coincidePrecio;
+  });
+
+  // contenedor modal
+  const container = document.getElementById("resultadosContainer");
+  container.innerHTML = "";
+
+  if (filtradas.length === 0) {
+    container.innerHTML = `
+      <div class="alert alert-warning text-center">
+        No se encontraron habitaciones con esos criterios.
+      </div>
+    `;
+  } else {
+    filtradas.forEach(room => {
+      const extra = extras[room.id];
+
+      const disponibleTexto = room.disponible
+        ? `<span class="text-success fw-bold">Disponible</span>`
+        : `<span class="text-danger fw-bold">Reservada</span>`;
+
+      container.innerHTML += `
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card offer-card shadow-sm h-100">
+
+            <img src="${extra.imagen}" class="card-img-top">
+
+            <div class="card-body d-flex flex-column">
+
+              <h5 class="card-title text-success">${extra.nombre}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                <i class="bi bi-geo-alt-fill"></i> ${extra.ubicacion}
+              </h6>
+
+              <p class="card-text flex-grow-1">${extra.descripcion}</p>
+
+              <ul class="list-unstyled small mb-3">
+                <li><strong>Tipo:</strong> ${room.tipo}</li>
+                <li><strong>Disponibilidad:</strong> ${disponibleTexto}</li>
+              </ul>
+
+              <div class="d-flex justify-content-between align-items-center mt-auto">
+                <span class="badge bg-success fs-6">
+                  $${room.precio} / noche
+                </span>
+
+                ${
+                  room.disponible
+                    ? `<button class="btn btn-primary btn-sm btn-reservar"
+                          data-room-details='${JSON.stringify({
+                            id: room.id,
+                            nombre: extra.nombre,
+                            ubicacion: extra.ubicacion,
+                            precio: room.precio,
+                            imagen: extra.imagen,
+                            tipo: room.tipo
+                          })}'>
+                          Reservar
+                       </button>`
+                    : `<button class="btn btn-secondary btn-sm" disabled>Ocupada</button>`
+                }
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  // mostrar modal
+  const modal = new bootstrap.Modal(document.getElementById("modalResultados"));
+  modal.show();
+}
+
+export async function cargarReservasAdmin() {
+    const tabla = document.getElementById("tablaReservasAdmin");
+    if (!tabla) return;
+
+    tabla.innerHTML = `<tr><td colspan="8" class="text-center">Cargando...</td></tr>`;
+  
+    try {
+        const resReservas = await fetch(API_RESERVATIONS);
+        const reservas = await resReservas.json();
+
+        const resUsers = await fetch(API_USERS);
+        const users = await resUsers.json();
+
+        const resRooms = await fetch(API_ROOMS);
+        const rooms = await resRooms.json();
+
+        tabla.innerHTML = "";
+
+        reservas.forEach(r => {
+            const usuario = users.find(u => u.id == r.userId);
+            const habitacion = rooms.find(h => h.id == r.roomId);
+
+            tabla.innerHTML += `
+                <tr>
+                    <td>${r.id}</td>
+
+                    <td>${usuario ? usuario.nombre : "Desconocido"}</td>
+                    <td>${usuario ? usuario.email : "Sin email"}</td>
+
+                    <td>${habitacion ? habitacion.tipo : "N/A"}</td>
+
+                    <td><strong>${r.roomId}</strong></td>
+
+                    <td>${r.checkIn}</td>
+                    <td>${r.checkOut}</td>
+
+                    <td>
+                        <span class="badge bg-${r.estado === "CANCELADA" ? "danger" : "success"}">
+                            ${r.estado}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        });
+
+    } catch (err) {
+        console.error("Error cargando reservas admin:", err);
+        tabla.innerHTML = `<tr><td colspan="8" class="text-center text-danger">Error al cargar reservas</td></tr>`;
+    }
+}
+
+// Cuando entro a gestionar reservas admin
+if (window.location.pathname.includes("gestionarReservasAdmin.html")) {
+    cargarReservasAdmin();
+}
+
+export async function cargarUsuariosAdmin() {
+    const tabla = document.getElementById("tablaUsuarios");
+    if (!tabla) return;
+
+    tabla.innerHTML = `
+        <tr>
+            <td colspan="2" class="text-center">Cargando usuarios...</td>
+        </tr>
+    `;
+
+    try {
+        const res = await fetch(API_USERS);
+        const usuarios = await res.json();
+
+        tabla.innerHTML = "";
+
+        usuarios.forEach(u => {
+            tabla.innerHTML += `
+                <tr>
+                    <td>${u.nombre}</td>
+                    <td>${u.email}</td>
+                </tr>
+            `;
+        });
+
+    } catch (error) {
+        console.error("Error cargando usuarios:", error);
+        tabla.innerHTML = `
+            <tr>
+                <td colspan="2" class="text-center text-danger">Error al cargar usuarios</td>
+            </tr>
+        `;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (window.location.pathname.includes("gestionarUsuariosAdmin.html")) {
+        cargarUsuariosAdmin();
+    }
+});
+
+
 
 
 
