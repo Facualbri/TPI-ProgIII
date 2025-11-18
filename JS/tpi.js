@@ -34,19 +34,6 @@ export async function obtenerReservas() {
     console.error("Error al obtener reservas:", error);
   }
 }
-//PROTEGER PANTALLA USUARIO
-export function protegerPantallaUsuario() {
-  const usuario = JSON.parse(localStorage.getItem("usuarioActivo"));
-
-  // Si es admin NO puede ver pantallaUsuario
-  if (usuario && usuario.role && usuario.role.toUpperCase() === "ADMIN") {
-    window.location.href = "../HTML/login.html";
-    return;
-  }
-
-  // SI NO HAY USUARIO → permitir ver la página como invitado
-  // (solo ocultamos botones desde otra función)
-}
 //LOGIN
 export async function loginUsuario(email, password) {
   try {
