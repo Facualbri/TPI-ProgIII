@@ -1,40 +1,10 @@
-import { User, API_USERS } from './Usuario.js';
-import { Room, API_ROOMS } from './Habitacion.js';
-import { Reservation, API_RESERVATIONS } from './Reserva.js';
+import { API_USERS } from './Usuario.js';
+import {  API_ROOMS } from './Habitacion.js';
+import { API_RESERVATIONS } from './Reserva.js';
 import { crearUsuario } from './Usuario.js';
 import { crearReserva } from './Reserva.js';
 import { crearHabitacion } from "./Habitacion.js"; 
 import { roomsExtraData } from "./roomsExtraData.js";
-//TRAER DATOS DESDE MOCKAPI
-export async function obtenerUsuarios() {
-  try {
-    const res = await fetch(API_USERS);
-    const usuarios = await res.json();
-    return usuarios.map(u => new User(u.id, u.nombre, u.email, u.password, u.role));
-  } catch (error) {
-    console.error("Error al obtener usuarios:", error);
-  }
-}
-
-export async function obtenerHabitaciones() {
-  try {
-    const res = await fetch(API_ROOMS);
-    const rooms = await res.json();
-    return rooms.map(h => new Room(h.id, h.tipo, h.precio, h.disponible));
-  } catch (error) {
-    console.error("Error al obtener habitaciones:", error);
-  }
-}
-
-export async function obtenerReservas() {
-  try {
-    const res = await fetch(API_RESERVATIONS);
-    const reservas = await res.json();
-    return reservas.map(r => new Reservation(r.id, r.userId, r.roomId, r.checkIn, r.checkOut, r.estado));
-  } catch (error) {
-    console.error("Error al obtener reservas:", error);
-  }
-}
 //LOGIN
 export async function loginUsuario(email, password) {
   try {
@@ -205,7 +175,7 @@ export function ocultarYMostrarPass(idInput, idBoton) {
 ocultarYMostrarPass("passwordRegister", "ocultarPassRegister");
 ocultarYMostrarPass("passwordLogin", "ocultarPassLogin");
 
-// ESTE DOM CONTIENE FUNCION CERRAR SESION, MANEJO BOTON CERRAR SESION Y BOTONES RESERVAR (DOM DE MANEJO GENERAL)
+// ESTE DOM , MANEJO BOTON CERRAR SESION Y BOTONES RESERVAR (DOM DE MANEJO GENERAL)
 document.addEventListener("DOMContentLoaded", () => {
   //CONEXION BOTON FILTRAR
     const searchForm = document.getElementById("searchForm");
@@ -256,7 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ======================================
   // INICIALIZAR CARRITO (solo si aplica)
-  // ======================================
+
   const detallesContainer = document.getElementById("reservaDetalles");
   if (detallesContainer && typeof inicializarCarrito === "function") {
     inicializarCarrito();
@@ -579,7 +549,8 @@ export async function mostrarReservasUsuario() {
   const usuarioActivo = JSON.parse(localStorage.getItem("usuarioActivo"));
   const container = document.getElementById("reservasContainer");
   const sinMsg = document.getElementById("sinReservasMsg");
-
+ const extrasLocal = JSON.parse(localStorage.getItem("roomsExtraData")) || {};
+    const extras = { ...roomsExtraData, ...extrasLocal };
   if (!usuarioActivo || !container) return;
 
   try {
@@ -608,34 +579,38 @@ export async function mostrarReservasUsuario() {
       const room = rooms.find(r => r.id == reserva.roomId);
       if (!room) return;
 
-      container.innerHTML += `
-                <div class="col-md-6">
-                    <div class="card shadow-sm">
+     container.innerHTML += `
+    <div class="col-md-6">
+        <div class="reserva-card">
 
-                        <div class="card-body">
+            <h5>Reserva #${reserva.id}</h5>
 
-                            <h5 class="card-title">Reserva #${reserva.id}</h5>
-                            <p><strong>Habitación:</strong> ${room.tipo}</p>
-                            <p><strong>Check-In:</strong> ${reserva.checkIn}</p>
-                            <p><strong>Check-Out:</strong> ${reserva.checkOut}</p>
-                            <p><strong>Estado:</strong> 
-                                <span class="badge bg-${reserva.estado === "CANCELADA" ? "danger" : "success"}">
-                                    ${reserva.estado}
-                                </span>
-                            </p>
+            <p><strong>Habitación:</strong> ${extras[room.id]?.nombre || "No disponible"}</p>
+            <p><strong>Tipo:</strong> ${room.tipo}</p>
+            <p><strong>Check-In:</strong> ${reserva.checkIn}</p>
+            <p><strong>Check-Out:</strong> ${reserva.checkOut}</p>
 
-                            ${reserva.estado !== "CANCELADA"
-          ? `<button class="btn btn-danger btn-cancelar" data-id="${reserva.id}" data-room="${room.id}">
-                                        Cancelar Reserva
-                                   </button>`
-          : `<button class="btn btn-secondary" disabled>Cancelada</button>`
-        }
+            <p><strong>Estado:</strong>
+                <span class="estado-badge badge bg-${reserva.estado === "CANCELADA" ? "danger" : "success"}">
+                    ${reserva.estado}
+                </span>
+            </p>
 
-                        </div>
+            <img src="${extras[room.id]?.imagen || room.imagen}" class="reserva-img">
 
-                    </div>
-                </div>
-            `;
+            ${
+              reserva.estado !== "CANCELADA"
+                ? `<button class="btn-cancelar-reserva mt-3" data-id="${reserva.id}" data-room="${room.id}">
+                        Cancelar Reserva
+                   </button>`
+                : `<button class="btn btn-secondary mt-3" disabled>Cancelada</button>`
+            }
+
+        </div>
+    </div>
+`;
+
+
     });
 
   } catch (error) {
@@ -669,13 +644,12 @@ export async function cancelarReserva(idReserva, idRoom) {
 }
 //CONEXION BOTONES CANCELAR RESERVA
 document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("btn-cancelar")) {
-    const idReserva = e.target.getAttribute("data-id");
-    const idRoom = e.target.getAttribute("data-room");
+  const btn = e.target.closest(".btn-cancelar-reserva");
+  if (!btn) return;
 
-    cancelarReserva(idReserva, idRoom);
-  }
+  cancelarReserva(btn.dataset.id, btn.dataset.room);
 });
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const reservasContainer = document.getElementById("reservasContainer");
@@ -882,6 +856,13 @@ export async function editarHabitacion(id) {
   const modal = new bootstrap.Modal(document.getElementById("modalEditarHabitacion"));
   modal.show();
 }
+//CONEXION BOTON EDITAR HABITACION
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".btn-edit-room");
+    if (!btn) return;
+
+    editarHabitacion(btn.dataset.id);
+});
 
 //GUARDAR CAMBIOS HABITACION EDITADA
 export async function guardarCambiosHabitacion() {
@@ -949,13 +930,6 @@ export async function guardarCambiosHabitacion() {
   bootstrap.Modal.getInstance(document.getElementById("modalEditarHabitacion")).hide();
 }
 
-document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".btn-edit-room");
-    if (!btn) return;
-
-    editarHabitacion(btn.dataset.id);
-});
-
 //CONEXION BOTON GUARDAR CAMBIOS
 const btnGuardar = document.getElementById("btnGuardarCambios");
 if (btnGuardar) {
@@ -969,37 +943,22 @@ export async function eliminarHabitacion(id) {
   if (!ok) return;
 
   try {
-
-    // ===============================
     // 1. ELIMINAR DE MOCKAPI
-    // ===============================
     await fetch(`${API_ROOMS}/${id}`, {
       method: "DELETE"
     });
 
-    // ===============================
     // 2. ELIMINAR DE LOCALSTORAGE
-    // ===============================
-
     const extrasLocal = JSON.parse(localStorage.getItem("roomsExtraData")) || {};
 
     delete extrasLocal[id];
 
     localStorage.setItem("roomsExtraData", JSON.stringify(extrasLocal));
-
-    // ===============================
     // 3. NOTIFICAR A PANTALLAUSUARIO
-    // ===============================
     localStorage.setItem("refreshRooms", "true");
-
-    // ===============================
     // 4. ALERTA
-    // ===============================
     alert("Habitación eliminada con éxito.");
-
-    // ===============================
     // 5. RECARGAR LISTA ADMIN
-    // ===============================
     if (typeof cargarHabitacionesAdmin === "function") {
       cargarHabitacionesAdmin();
     }
@@ -1170,7 +1129,7 @@ export async function cargarReservasAdmin() {
     }
 }
 
-// Cuando entro a gestionar reservas admin
+// CONEXION CARGAR RESERVAS ADMIN
 if (window.location.pathname.includes("gestionarReservasAdmin.html")) {
     cargarReservasAdmin();
 }
@@ -1209,7 +1168,7 @@ export async function cargarUsuariosAdmin() {
         `;
     }
 }
-
+// CONEXION CARGAR USUARIOS ADMIN
 document.addEventListener("DOMContentLoaded", () => {
     if (window.location.pathname.includes("gestionarUsuariosAdmin.html")) {
         cargarUsuariosAdmin();

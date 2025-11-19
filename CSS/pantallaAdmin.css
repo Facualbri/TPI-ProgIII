@@ -181,3 +181,59 @@ body {
 h3 {
     color: white;
 }
+
+/* ================================ */
+/*   CARDS DE ADMIN - MISMO TAMAÑO  */
+/* ================================ */
+
+#listaHabitaciones .card {
+    border-radius: 14px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+    height: 460px;                /* ALTO FIJO DE TODAS LAS CARDS */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Imagen arriba */
+#listaHabitaciones .card img {
+    height: 200px;                /* MISMA ALTURA PARA TODAS */
+    object-fit: cover;
+    width: 100%;
+}
+
+/* Contenido */
+#listaHabitaciones .card-body {
+    flex: 1;
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Títulos */
+#listaHabitaciones .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-admin-dark);
+}
+
+/* Texto */
+#listaHabitaciones .card-text {
+    color: #333;
+    font-size: .9rem;
+    margin-bottom: 10px;
+    max-height: 70px;             /* LIMITE PARA QUE NO SE ESTIRE */
+    overflow: hidden;
+}
+
+/* Footer de precio + botones */
+#listaHabitaciones .card-footer {
+    background: transparent;
+    border: none;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

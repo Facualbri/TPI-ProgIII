@@ -1,11 +1,5 @@
-// =========================
-//  CONFIGURACIÓN
-// =========================
 export const API_ROOMS = 'https://6913a83af34a2ff1170cc57b.mockapi.io/api/v1/rooms';
 
-// =========================
-//  CLASE ROOM
-// =========================
 export class Room {
   constructor(id, tipo, precio, disponible) {
     this.id = id;
@@ -15,10 +9,6 @@ export class Room {
   }
 }
 
-// =========================
-//  CREAR UNA HABITACIÓN
-//  (CON ID MANUAL!!!)
-// =========================
 export async function crearHabitacion(id, tipo, precio, disponible) {
 
   const nuevaHabitacion = new Room(id, tipo, precio, disponible);
@@ -41,10 +31,7 @@ export async function crearHabitacion(id, tipo, precio, disponible) {
   return await res.json();
 }
 
-// =========================
-// BORRAR TODAS LAS HABITACIONES
-// (para reiniciar MockAPI)
-// =========================
+
 export async function borrarTodasLasHabitaciones() {
   try {
     const res = await fetch(API_ROOMS);
@@ -64,15 +51,10 @@ export async function borrarTodasLasHabitaciones() {
 }
 //borrarTodasLasHabitaciones();
 
-// =========================
-//  TIPOS PREDEFINIDOS
-// =========================
+
 const tipos = ["single", "double", "suite", "family", ];
 
-// =========================
-// GENERAR 27 HABITACIONES
-// CON ID MANUAL 1 → 27
-// =========================
+
 export async function generarHabitacionesAuto() {
   try {
 

@@ -1,6 +1,4 @@
-/* ========================================= */
-/* PALETA DE COLORES (MATCH CON ADMIN) */
-/* ========================================= */
+/*paleta de colores*/
 :root {
     --color-admin-dark: #0b3d2e;     /* Verde bosque oscuro */
     --color-admin-main: #1f6f4a;     /* Verde musgo */
@@ -10,9 +8,9 @@
     --color-text-dark: #222;
 }
 
-/* ========================================= */
+
 /* FONDO GENERAL (imagen + overlay oscuro) */
-/* ========================================= */
+
 body {
     background: 
         linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
@@ -214,4 +212,202 @@ body {
 .offer-card small,
 .offer-card .small {
     color: #ffffff !important;
+}
+/* ===== MODAL RESULTADOS ===== */
+
+#modalResultados .modal-content {
+  background: rgba(0, 35, 23, 0.90);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+#modalResultados .modal-header {
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0, 35, 23, 0.8);
+}
+
+#modalResultados .modal-title {
+  color: #f3f3f3;
+  font-weight: 600;
+}
+
+/* CONTENEDOR: USA EXACTAMENTE EL MISMO LAYOUT QUE LA PÁGINA */
+#resultadosContainer {
+  padding: 20px;
+}
+
+/* ===== CARD — SOLO CAMBIO COLOR, NO TAMAÑO ===== */
+
+#resultadosContainer .card {
+  background: rgba(0, 0, 0, 0.55) !important;
+  backdrop-filter: blur(6px);
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  transition: transform 0.25s;
+}
+
+#resultadosContainer .card:hover {
+  transform: scale(1.03);
+}
+
+/* Imagen arriba — no cambies height ni width */
+#resultadosContainer .card img {
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+}
+
+/* Contenido igual */
+#resultadosContainer .card-body {
+  color: #e0e0e0;
+}
+
+/* Precio igual */
+#resultadosContainer .precio {
+  background: #ffc107;
+  color: #222;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+/* Botón reservar */
+#resultadosContainer .btn-reservar {
+  display: inline-block;
+  background: #006c4f;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-left: 10px;
+  transition: 0.2s;
+}
+
+#resultadosContainer .btn-reservar:hover {
+  background: #00976e;
+}
+
+/* =============================== */
+/* ESTILO DE LAS CARDS DE RESERVAS */
+/* =============================== */
+
+/* Card general */
+.reserva-card {
+    background: rgba(0, 40, 25, 0.85);  /* verde oscuro como las otras pages */
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Título */
+.reserva-card h5 {
+    font-weight: 700;
+    color: #fff;
+}
+
+/* Etiquetas */
+.reserva-card p strong {
+    color: #d9b96a; /* dorado suave */
+}
+
+/* Estado */
+.reserva-card .estado-badge {
+    font-size: 0.9rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+/* Imagen */
+.reserva-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-top: 15px;
+    border: 2px solid rgba(255,255,255,0.15);
+}
+
+/* Botón cancelar */
+.btn-cancelar-reserva {
+    margin-top: 12px;
+    background: #c0392b !important;
+    border: none;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 10px 16px;
+}
+
+.btn-cancelar-reserva:hover {
+    background: #922b21 !important;
+}
+
+
+
+/* ========================================= */
+/* CARD DE RESERVA — ESTILO DEL HOTEL */
+/* ========================================= */
+
+.reserva-card {
+    background: rgba(0, 40, 25, 0.85);        /* Verde bosque */
+    color: #ffffff;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(6px);
+    transition: .25s;
+}
+
+.reserva-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, .45);
+}
+
+/* Títulos */
+.reserva-card h5 {
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: #d9b96a;      /* Dorado suave */
+    margin-bottom: 12px;
+}
+
+/* Etiquetas */
+.reserva-card p strong {
+    color: #d9b96a;
+}
+
+/* Estado */
+.estado-badge {
+    font-size: 0.9rem;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+/* Imagen de habitación */
+.reserva-img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-top: 14px;
+    border: 2px solid rgba(255,255,255,0.12);
+    display: block;
+}
+
+/* Botón cancelar */
+.btn-cancelar-reserva {
+    background: #c0392b !important;
+    border: none;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 10px 18px;
+    margin-top: 14px;
+    transition: 0.25s;
+}
+
+.btn-cancelar-reserva:hover {
+    background: #922b21 !important;
 }
