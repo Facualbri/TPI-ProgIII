@@ -3,6 +3,7 @@ import { Room, API_ROOMS } from './Habitacion.js';
 import { Reservation, API_RESERVATIONS } from './Reserva.js';
 import { crearUsuario } from './Usuario.js';
 import { crearReserva } from './Reserva.js';
+import { crearHabitacion } from "./Habitacion.js"; 
 import { roomsExtraData } from "./roomsExtraData.js";
 //TRAER DATOS DESDE MOCKAPI
 export async function obtenerUsuarios() {
@@ -684,6 +685,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // FUNCION DE ADMIN
+// Refrescar en pantallausuario
 export async function publicarHabitacion(event) {
   event.preventDefault();
 
@@ -702,28 +704,28 @@ export async function publicarHabitacion(event) {
     return;
   }
 
-  // ⛔ NADA DE BASE64
-  // ✔ URL temporal súper liviana
+  // ✔ URL temporal (ya NO usamos Base64)
   const imagenUrl = URL.createObjectURL(imagenFile);
 
-  // Obtener habitaciones existentes desde MockAPI
+  // Obtener habitaciones actuales para generar ID
   const res = await fetch(API_ROOMS);
   const rooms = await res.json();
   const newId = String(rooms.length + 1);
 
-  // Guardar en MockAPI
-  await fetch(API_ROOMS, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      id: newId,
-      tipo,
-      precio,
-      disponible: true
-    })
-  });
+  // 🟢 CREAR HABITACIÓN EN LA API USANDO TU FUNCIÓN
+  const habitacionCreada = await crearHabitacion(
+    newId,
+    tipo,
+    precio,
+    true      // disponible
+  );
 
-  // Guardar extras en localStorage
+  if (!habitacionCreada) {
+    alert("Error al crear la habitación en la API.");
+    return;
+  }
+
+  // Guardar extraData en localStorage
   const extrasLocal = JSON.parse(localStorage.getItem("roomsExtraData")) || {};
 
   extrasLocal[newId] = {
@@ -741,7 +743,7 @@ export async function publicarHabitacion(event) {
 
   localStorage.setItem("refreshRooms", "true");
 
-  // Refrescar si existe la función
+  // Refrescar en pantallausuario
   if (typeof cargarHabitaciones === "function") {
     cargarHabitaciones();
   }
@@ -764,6 +766,8 @@ document.addEventListener("DOMContentLoaded", () => {
 //REVISA SI EXISTEN CONTENEDORES PARA NO ROMPER NADA
 document.addEventListener("DOMContentLoaded", () => {
   cargarHabitacionesAdmin();
+  cargarReservasAdmin();
+  cargarUsuariosAdmin();
 });
 
 export async function cargarHabitacionesAdmin() {
@@ -1210,11 +1214,34 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.location.pathname.includes("gestionarUsuariosAdmin.html")) {
         cargarUsuariosAdmin();
     }
-});
+})
 
+// DASHBOARD CONTADORES
+export async function cargarDashboardAdmin() {
 
+    const numHab = document.getElementById("dashHabitaciones");
+    const numRes = document.getElementById("dashReservas");
+    const numUsers = document.getElementById("dashUsuarios");
 
+    if (!numHab || !numRes || !numUsers) return; // No estamos en pantalla admin
 
+    try {
+        // Habitaciones
+        const resRooms = await fetch(API_ROOMS);
+        const rooms = await resRooms.json();
+        numHab.textContent = rooms.length;
 
+        // Reservas
+        const resReservas = await fetch(API_RESERVATIONS);
+        const reservas = await resReservas.json();
+        numRes.textContent = reservas.length;
 
+        // Usuarios
+        const resUsers = await fetch(API_USERS);
+        const users = await resUsers.json();
+        numUsers.textContent = users.length;
 
+    } catch (err) {
+        console.error("Error cargando dashboard:", err);
+    }
+} 
